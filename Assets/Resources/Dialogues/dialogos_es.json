@@ -1,0 +1,3021 @@
+{
+  "language": "es",
+  "speakers": [
+    {
+      "id": "NIL",
+      "name": "Nil",
+      "color": "#EE6C2F"
+    },
+    {
+      "id": "VOLT",
+      "name": "Volt",
+      "color": "#FFD34E"
+    },
+    {
+      "id": "ESTACION",
+      "name": "Estación",
+      "color": "#4B89A6"
+    },
+    {
+      "id": "CUADERNO",
+      "name": "Cuaderno de papá",
+      "color": "#F5F0D8"
+    },
+    {
+      "id": "AVI_ROC",
+      "name": "Avi Roc",
+      "color": "#62B56B"
+    },
+    {
+      "id": "PADRE",
+      "name": "Papá",
+      "color": "#A8BDC7"
+    }
+  ],
+  "dialogues": [
+    {
+      "id": "pro_01_refugio",
+      "chapter": "prologo",
+      "trigger": {
+        "type": "zona",
+        "character": "Nil",
+        "where": "Entrada del refugio, al empezar la partida."
+      },
+      "mode": "ambiente",
+      "once": true,
+      "randomLine": false,
+      "requires": [],
+      "sets": [],
+      "note": "",
+      "lines": [
+        {
+          "speaker": "NIL",
+          "text": "El refugio de papá. Treinta años y sigue en pie.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "Huele a leña vieja... y un poco a él.",
+          "channel": "local",
+          "emotion": "triste",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        }
+      ]
+    },
+    {
+      "id": "pro_02_cuaderno",
+      "chapter": "prologo",
+      "trigger": {
+        "type": "interactuar",
+        "character": "Nil",
+        "where": "Cuaderno y mapa sobre la mesa del refugio."
+      },
+      "mode": "cinematica",
+      "once": true,
+      "randomLine": false,
+      "requires": [],
+      "sets": [
+        "tiene_cuaderno"
+      ],
+      "note": "",
+      "lines": [
+        {
+          "speaker": "CUADERNO",
+          "text": "Mañana subo. Dicen que desde el observatorio se ve el cielo entero, limpio, sin nada encima.",
+          "channel": "cuaderno",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "CUADERNO",
+          "text": "Si llego, lo dibujaré aquí. Página a página.",
+          "channel": "cuaderno",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "Nunca llegaste a dibujarlo, papá.",
+          "channel": "local",
+          "emotion": "triste",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "Esta vez subimos los dos. Tú en el cuaderno y yo con las piernas.",
+          "channel": "local",
+          "emotion": "decidido",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        }
+      ]
+    },
+    {
+      "id": "pro_03_avi_roc",
+      "chapter": "prologo",
+      "trigger": {
+        "type": "interactuar",
+        "character": "Nil",
+        "where": "Hablar con el Avi Roc junto a la chimenea."
+      },
+      "mode": "cinematica",
+      "once": true,
+      "randomLine": false,
+      "requires": [],
+      "sets": [
+        "tiene_radio"
+      ],
+      "note": "Da la radio a Nil: a partir de aquí se pueden oír diálogos por radio.",
+      "lines": [
+        {
+          "speaker": "AVI_ROC",
+          "text": "Así que tú eres el chaval del cuaderno. Tienes sus mismos ojos. Los de mirar hacia arriba.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "AVI_ROC",
+          "text": "Toma, su walkie. La otra radio la tiene él en casa, pero sin luz en el valle esa radio es un trasto.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "¿Alguna vez le contestó alguien desde la estación?",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "AVI_ROC",
+          "text": "Nunca. Y aun así, mientras hubo luz en el valle, cada noche seguía llamando.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "AVI_ROC",
+          "text": "La montaña no tiene prisa, chaval. Tú tampoco deberías tenerla.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        }
+      ]
+    },
+    {
+      "id": "pro_04_volt_despierta",
+      "chapter": "prologo",
+      "trigger": {
+        "type": "evento",
+        "character": "Volt",
+        "where": "Primera vez que se controla a Volt (escena de despertar)."
+      },
+      "mode": "cinematica",
+      "once": true,
+      "randomLine": false,
+      "requires": [],
+      "sets": [],
+      "note": "",
+      "lines": [
+        {
+          "speaker": "ESTACION",
+          "text": "REINICIO DE EMERGENCIA. UNIDAD DE MANTENIMIENTO VLT-05: ACTIVA.",
+          "channel": "terminal",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": "terminal_on"
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Bip. Batería: 4 %.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": "bip_bateria"
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Tiempo en reposo: 4.380 días.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Consultando última orden...",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        }
+      ]
+    },
+    {
+      "id": "pro_05_terminal",
+      "chapter": "prologo",
+      "trigger": {
+        "type": "interactuar",
+        "character": "Volt",
+        "where": "Terminal junto al punto donde despierta Volt."
+      },
+      "mode": "cinematica",
+      "once": true,
+      "randomLine": false,
+      "requires": [],
+      "sets": [
+        "lista_tareas"
+      ],
+      "note": "",
+      "lines": [
+        {
+          "speaker": "ESTACION",
+          "text": "SISTEMAS FUERA DE SERVICIO: 5.",
+          "channel": "terminal",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "ESTACION",
+          "text": "1 ENERGÍA · 2 VENTILACIÓN · 3 ILUMINACIÓN · 4 ASCENSOR · 5 COMUNICACIONES.",
+          "channel": "terminal",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "ESTACION",
+          "text": "NOTA DE LA DRA. AINA: «VLT-05, si despiertas antes de que volvamos, empieza por la energía. Volvemos mañana.»",
+          "channel": "terminal",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Mañana. Calculando... Han pasado 4.380 mañanas.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Orden aceptada. Esta unidad empieza por la energía.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        }
+      ]
+    },
+    {
+      "id": "pro_06_ruido_radio",
+      "chapter": "prologo",
+      "trigger": {
+        "type": "zona",
+        "character": "Nil",
+        "where": "Salida del refugio. Buen momento para enseñar el cambio con Q."
+      },
+      "mode": "ambiente",
+      "once": true,
+      "randomLine": false,
+      "requires": [
+        "tiene_radio"
+      ],
+      "sets": [],
+      "note": "Después de esta línea, mostrar el aviso «Pulsa Q para cambiar de personaje».",
+      "lines": [
+        {
+          "speaker": "NIL",
+          "text": "¿La radio? Llevaba años muerta...",
+          "channel": "local",
+          "emotion": "sorpresa",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": "radio_estatica"
+        },
+        {
+          "speaker": "VOLT",
+          "text": "...bip... ¿...alguien...?",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.95,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "¿Hola? ¿Quién eres?",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.85,
+          "duration": 0.0,
+          "sfx": ""
+        }
+      ]
+    },
+    {
+      "id": "pro_07_primer_contacto",
+      "chapter": "prologo",
+      "trigger": {
+        "type": "zona",
+        "character": "Volt",
+        "where": "Final de la primera cueva, bajo una antena vieja."
+      },
+      "mode": "cinematica",
+      "once": true,
+      "randomLine": false,
+      "requires": [],
+      "sets": [
+        "primer_contacto"
+      ],
+      "note": "",
+      "lines": [
+        {
+          "speaker": "VOLT",
+          "text": "Señal detectada. Canal de emergencia.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.85,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "...me oyes? ...estoy en el refugio... voy a subir...",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.85,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Identifíquese.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.85,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "Me llamo Nil. ¿Y tú?",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.85,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Unidad de mantenimiento VLT-05. Batería: 4 %. Cinco sistemas pendientes.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.85,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "No he entendido casi nada, pero suenas cansado.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.85,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Esta unidad no se cansa. Se descarga.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.85,
+          "duration": 0.0,
+          "sfx": ""
+        }
+      ]
+    },
+    {
+      "id": "c1_01_bosque_seco",
+      "chapter": "cap1",
+      "trigger": {
+        "type": "zona",
+        "character": "Nil",
+        "where": "Inicio del Bosc de les Arrels, junto al cauce seco."
+      },
+      "mode": "ambiente",
+      "once": true,
+      "randomLine": false,
+      "requires": [],
+      "sets": [],
+      "note": "",
+      "lines": [
+        {
+          "speaker": "NIL",
+          "text": "Papá dibujó aquí un río. Aquí no hay ningún río.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "Solo piedras mojadas. El agua se ha ido a alguna parte.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        }
+      ]
+    },
+    {
+      "id": "c1_02_cueva_inundada",
+      "chapter": "cap1",
+      "trigger": {
+        "type": "zona",
+        "character": "Volt",
+        "where": "Entrada a la primera galería inundada de las Coves Humides."
+      },
+      "mode": "ambiente",
+      "once": true,
+      "randomLine": false,
+      "requires": [],
+      "sets": [
+        "sabe_del_agua"
+      ],
+      "note": "",
+      "lines": [
+        {
+          "speaker": "VOLT",
+          "text": "Nivel de agua: 80 %. Esta unidad no flota.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Esta unidad tampoco nada. Esta unidad se hunde con mucha eficiencia.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Nil. Aquí abajo entra agua. Mucha agua.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.85,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "...¿agua? Espera... creo que sé de dónde viene.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.85,
+          "duration": 0.0,
+          "sfx": ""
+        }
+      ]
+    },
+    {
+      "id": "c1_03_desprendimiento",
+      "chapter": "cap1",
+      "trigger": {
+        "type": "zona",
+        "character": "Nil",
+        "where": "Vista del desprendimiento que desvía el río hacia la montaña."
+      },
+      "mode": "ambiente",
+      "once": true,
+      "randomLine": false,
+      "requires": [],
+      "sets": [],
+      "note": "",
+      "lines": [
+        {
+          "speaker": "NIL",
+          "text": "Ahí está. Las rocas han desviado el río hacia dentro de la montaña.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "Si consigo tirar ese tronco, a lo mejor vuelve a su cauce.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "Oye, robot, aguanta. Voy a cerrarle el grifo a la montaña.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.85,
+          "duration": 0.0,
+          "sfx": ""
+        }
+      ]
+    },
+    {
+      "id": "c1_04_rio_devuelto",
+      "chapter": "cap1",
+      "trigger": {
+        "type": "evento",
+        "character": "Cualquiera",
+        "where": "Al completar el puzle del río (el tronco cae y el agua vuelve al cauce)."
+      },
+      "mode": "ambiente",
+      "once": true,
+      "randomLine": false,
+      "requires": [],
+      "sets": [
+        "rio_devuelto"
+      ],
+      "note": "",
+      "lines": [
+        {
+          "speaker": "VOLT",
+          "text": "El nivel del agua baja. 80... 52... 17 %.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.85,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "¿Has sido tú?",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.85,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "Con un tronco y mucha cabezonería.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.85,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Registro: Nil ayuda. Esta unidad no tiene ninguna carpeta para este dato.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.85,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "Pues hazte una.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.85,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Carpeta creada.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.85,
+          "duration": 0.0,
+          "sfx": ""
+        }
+      ]
+    },
+    {
+      "id": "c1_05_primer_cargador",
+      "chapter": "cap1",
+      "trigger": {
+        "type": "interactuar",
+        "character": "Volt",
+        "where": "Primera estación de carga de las Coves Humides."
+      },
+      "mode": "ambiente",
+      "once": true,
+      "randomLine": false,
+      "requires": [],
+      "sets": [],
+      "note": "",
+      "lines": [
+        {
+          "speaker": "VOLT",
+          "text": "Estación de carga. Bip, bip. 4... 30... 100 %.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": "carga"
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Así se siente estar lleno. Lo había olvidado.",
+          "channel": "local",
+          "emotion": "feliz",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        }
+      ]
+    },
+    {
+      "id": "c1_06_generador",
+      "chapter": "cap1",
+      "trigger": {
+        "type": "evento",
+        "character": "Volt",
+        "where": "Al reactivar el primer generador (sistema 1: energía)."
+      },
+      "mode": "cinematica",
+      "once": true,
+      "randomLine": false,
+      "requires": [],
+      "sets": [
+        "sistema_1",
+        "nombre_volt"
+      ],
+      "note": "",
+      "lines": [
+        {
+          "speaker": "ESTACION",
+          "text": "SISTEMA 1/5 · ENERGÍA: RESTABLECIDA.",
+          "channel": "terminal",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": "sistema_ok"
+        },
+        {
+          "speaker": "ESTACION",
+          "text": "MENSAJE GUARDADO: «Si oyes esto, el corazón de la estación vuelve a latir. Buen trabajo.» — A.",
+          "channel": "terminal",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Señal de radio mejorada un 40 %.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "¡Ahora te oigo mucho mejor! ¿Cómo dijiste que te llamabas? ¿Uve-ele-te...?",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.5,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "VLT-05.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.5,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "Eso es una matrícula, no un nombre. ¿Te puedo llamar Volt?",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.5,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "...",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.5,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Nombre guardado: Volt. Bip. Guardado dos veces, por si acaso.",
+          "channel": "radio",
+          "emotion": "feliz",
+          "interference": 0.5,
+          "duration": 0.0,
+          "sfx": ""
+        }
+      ]
+    },
+    {
+      "id": "c1_07_invernadero",
+      "chapter": "cap1",
+      "trigger": {
+        "type": "zona",
+        "character": "Volt",
+        "where": "Entrada al invernadero muerto de la estación."
+      },
+      "mode": "ambiente",
+      "once": true,
+      "randomLine": false,
+      "requires": [],
+      "sets": [],
+      "note": "",
+      "lines": [
+        {
+          "speaker": "VOLT",
+          "text": "Invernadero de la estación. Plantas vivas: 0.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "La doctora Aina regaba aquí cada mañana. Yo... esta unidad la ayudaba a contar las hojas.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Ya no quedan hojas que contar.",
+          "channel": "local",
+          "emotion": "triste",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        }
+      ]
+    },
+    {
+      "id": "c1_08_semilla",
+      "chapter": "cap1",
+      "trigger": {
+        "type": "evento",
+        "character": "Volt",
+        "where": "Al abrir la cápsula sellada del invernadero (recoger la semilla)."
+      },
+      "mode": "cinematica",
+      "once": true,
+      "randomLine": false,
+      "requires": [],
+      "sets": [
+        "semilla_etapa_1"
+      ],
+      "note": "Etapa visual de la semilla: SEMILLA.",
+      "lines": [
+        {
+          "speaker": "ESTACION",
+          "text": "CÁPSULA DE CONSERVACIÓN 07. ETIQUETA: «Para el valle. Cuando vuelva la luz.»",
+          "channel": "terminal",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Contenido: una semilla.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Nil. He encontrado algo. Es solo una semilla.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.5,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "Mi padre decía que una semilla nunca es solo una semilla. Es un árbol que todavía no se ha atrevido.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.5,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Esta no se atreve porque aquí no hay luz.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.5,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "Pues llévala contigo. Ya se atreverá.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.5,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Nueva carga en el inventario. Peso: casi nada. Importancia: calculando...",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.5,
+          "duration": 0.0,
+          "sfx": ""
+        }
+      ]
+    },
+    {
+      "id": "c1_09_cuerda_larga",
+      "chapter": "cap1",
+      "trigger": {
+        "type": "evento",
+        "character": "Nil",
+        "where": "Al conseguir la cuerda larga (cierre del capítulo, en el bosque)."
+      },
+      "mode": "ambiente",
+      "once": true,
+      "randomLine": false,
+      "requires": [],
+      "sets": [
+        "cuerda_larga"
+      ],
+      "note": "",
+      "lines": [
+        {
+          "speaker": "NIL",
+          "text": "La cuerda larga de papá. Nunca llegó a usarla.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "CUADERNO",
+          "text": "El Bosque de las Raíces: los árboles se agarran a la roca como si tuvieran miedo de caerse. Me caen bien.",
+          "channel": "cuaderno",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "A mí también, papá.",
+          "channel": "local",
+          "emotion": "feliz",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        }
+      ]
+    },
+    {
+      "id": "c1_10_hoguera",
+      "chapter": "cap1",
+      "trigger": {
+        "type": "zona",
+        "character": "Nil",
+        "where": "Primera hoguera (punto de control) al final del capítulo 1, al anochecer."
+      },
+      "mode": "cinematica",
+      "once": true,
+      "randomLine": false,
+      "requires": [
+        "sistema_1"
+      ],
+      "sets": [
+        "promesa_cielo"
+      ],
+      "note": "Planta la frase del techo que no se acaba; vuelve en el final.",
+      "lines": [
+        {
+          "speaker": "NIL",
+          "text": "Volt, ¿sigues ahí?",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.5,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Sigo. Batería: 61 %. Semilla: estable.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.5,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "Aquí fuera está anocheciendo. Ojalá pudieras verlo.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.5,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Esta unidad nunca ha salido de la estación. ¿Cómo es el cielo?",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.5,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "Pues... como el techo de tu cueva. Pero no se acaba nunca.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.5,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Un techo que no se acaba. Eso no tiene ningún sentido estructural.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.5,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "Ya. Por eso es bonito.",
+          "channel": "radio",
+          "emotion": "feliz",
+          "interference": 0.5,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Bip. Archivado en «cosas que quiero ver».",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.5,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "¿Tienes una carpeta para eso?",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.5,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "La acabo de crear.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.5,
+          "duration": 0.0,
+          "sfx": ""
+        }
+      ]
+    },
+    {
+      "id": "c2_01_carena",
+      "chapter": "cap2",
+      "trigger": {
+        "type": "zona",
+        "character": "Nil",
+        "where": "Inicio de la Carena del Vent (primer golpe de viento)."
+      },
+      "mode": "ambiente",
+      "once": true,
+      "randomLine": false,
+      "requires": [],
+      "sets": [],
+      "note": "",
+      "lines": [
+        {
+          "speaker": "CUADERNO",
+          "text": "La cresta del viento. El tramo que más miedo da. Consejo: no mires abajo. Yo miré.",
+          "channel": "cuaderno",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "Genial, papá. Muy útil.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        }
+      ]
+    },
+    {
+      "id": "c2_02_minas",
+      "chapter": "cap2",
+      "trigger": {
+        "type": "zona",
+        "character": "Volt",
+        "where": "Entrada a las Mines de Cristall (oscuridad total)."
+      },
+      "mode": "ambiente",
+      "once": true,
+      "randomLine": false,
+      "requires": [],
+      "sets": [],
+      "note": "",
+      "lines": [
+        {
+          "speaker": "VOLT",
+          "text": "Minas de cristal. Visibilidad: 0 %.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Los cristales guardan la energía de la estación. Si les doy luz, recuerdan cómo brillar.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        }
+      ]
+    },
+    {
+      "id": "c2_03_primer_cristal",
+      "chapter": "cap2",
+      "trigger": {
+        "type": "evento",
+        "character": "Volt",
+        "where": "Al iluminar el primer cristal con la linterna."
+      },
+      "mode": "ambiente",
+      "once": true,
+      "randomLine": false,
+      "requires": [],
+      "sets": [],
+      "note": "",
+      "lines": [
+        {
+          "speaker": "VOLT",
+          "text": "Bip. ¿Lo ves, Nil? Ah. No lo ves. Es azul. Muy azul.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.5,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "Descríbemelo.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.5,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Es como si alguien hubiera guardado aquí abajo un trozo de tu cielo.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.5,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "Volt, eso ha sido casi poético.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.5,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Error. Esta unidad no tiene módulo de poesía.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.5,
+          "duration": 0.0,
+          "sfx": ""
+        }
+      ]
+    },
+    {
+      "id": "c2_04_pendulos",
+      "chapter": "cap2",
+      "trigger": {
+        "type": "zona",
+        "character": "Nil",
+        "where": "Antes del primer péndulo largo de la cresta, con viento."
+      },
+      "mode": "ambiente",
+      "once": true,
+      "randomLine": false,
+      "requires": [],
+      "sets": [],
+      "note": "",
+      "lines": [
+        {
+          "speaker": "NIL",
+          "text": "El viento me empuja... Volt, no puedo. Me tiemblan las manos.",
+          "channel": "radio",
+          "emotion": "miedo",
+          "interference": 0.5,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Dato: tus manos tiemblan, pero siguen agarradas.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.5,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Vamos a contar. Cuando el péndulo vuelva: uno, dos... y saltas en el tres.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.5,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "Uno... dos...",
+          "channel": "radio",
+          "emotion": "miedo",
+          "interference": 0.5,
+          "duration": 0.0,
+          "sfx": ""
+        }
+      ]
+    },
+    {
+      "id": "c2_05_cresta_superada",
+      "chapter": "cap2",
+      "trigger": {
+        "type": "zona",
+        "character": "Nil",
+        "where": "Plataforma segura al final del tramo de péndulos."
+      },
+      "mode": "ambiente",
+      "once": true,
+      "randomLine": false,
+      "requires": [],
+      "sets": [],
+      "note": "",
+      "lines": [
+        {
+          "speaker": "NIL",
+          "text": "¡Lo he cruzado! ¡Volt, lo he cruzado!",
+          "channel": "radio",
+          "emotion": "feliz",
+          "interference": 0.5,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Registro: Nil tenía miedo y lo ha hecho igual. Guardado en «cosas valientes».",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.5,
+          "duration": 0.0,
+          "sfx": ""
+        }
+      ]
+    },
+    {
+      "id": "c2_06_donde_se_volvio",
+      "chapter": "cap2",
+      "trigger": {
+        "type": "interactuar",
+        "character": "Nil",
+        "where": "Roca con las iniciales del padre grabadas, en lo alto de la cresta."
+      },
+      "mode": "cinematica",
+      "once": true,
+      "randomLine": false,
+      "requires": [],
+      "sets": [
+        "paso_del_padre"
+      ],
+      "note": "Momento clave de Nil. Después, el camino sigue más allá de donde llegó el padre.",
+      "lines": [
+        {
+          "speaker": "NIL",
+          "text": "Hay algo grabado en la roca... Son sus iniciales. Y una fecha.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "CUADERNO",
+          "text": "Hasta aquí llegué. El viento ganó. Me di la vuelta, y desde entonces no he dejado de pensar en lo que había al otro lado.",
+          "channel": "cuaderno",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "Papá llegó hasta aquí. Hasta aquí, y ni un paso más.",
+          "channel": "local",
+          "emotion": "triste",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Nil. Tu señal ha bajado. ¿Estás bien?",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.5,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "Toda la vida pensé que había fracasado. Y mira. Casi lo consigue.",
+          "channel": "radio",
+          "emotion": "triste",
+          "interference": 0.5,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Esta unidad tiene una lista de cinco cosas que nadie terminó. No creo que eso sea fracasar.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.5,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Creo que es dejarle el trabajo a otro.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.5,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "...Entonces me lo dejó a mí.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.5,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "Vale. El siguiente paso lo doy yo.",
+          "channel": "local",
+          "emotion": "decidido",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        }
+      ]
+    },
+    {
+      "id": "c2_07_ventilacion",
+      "chapter": "cap2",
+      "trigger": {
+        "type": "evento",
+        "character": "Volt",
+        "where": "Al reactivar la ventilación (sistema 2)."
+      },
+      "mode": "ambiente",
+      "once": true,
+      "randomLine": false,
+      "requires": [],
+      "sets": [
+        "sistema_2"
+      ],
+      "note": "",
+      "lines": [
+        {
+          "speaker": "ESTACION",
+          "text": "SISTEMA 2/5 · VENTILACIÓN: RESTABLECIDA.",
+          "channel": "terminal",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": "sistema_ok"
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Aire en movimiento. La semilla se mueve... No. Es el aire.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Esta unidad quería que fuera la semilla.",
+          "channel": "local",
+          "emotion": "triste",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        }
+      ]
+    },
+    {
+      "id": "c2_08_iluminacion_brote",
+      "chapter": "cap2",
+      "trigger": {
+        "type": "evento",
+        "character": "Volt",
+        "where": "Al reactivar la iluminación (sistema 3). La semilla brota."
+      },
+      "mode": "cinematica",
+      "once": true,
+      "randomLine": false,
+      "requires": [],
+      "sets": [
+        "sistema_3",
+        "semilla_etapa_2",
+        "tarea_6"
+      ],
+      "note": "Etapa visual de la semilla: BROTE. Momento clave de Volt.",
+      "lines": [
+        {
+          "speaker": "ESTACION",
+          "text": "SISTEMA 3/5 · ILUMINACIÓN: RESTABLECIDA.",
+          "channel": "terminal",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": "sistema_ok"
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Bip. Bip. ¡Bip!",
+          "channel": "radio",
+          "emotion": "sorpresa",
+          "interference": 0.4,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "¿Volt? ¿Qué pasa? ¿Te has roto?",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.4,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "La semilla. Ha salido algo verde. Pequeño. Muy pequeño.",
+          "channel": "radio",
+          "emotion": "feliz",
+          "interference": 0.4,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "¡Ha brotado!",
+          "channel": "radio",
+          "emotion": "feliz",
+          "interference": 0.4,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Yo... esta unidad lo ha visto la primera.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.4,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Añadiendo tarea a la lista. Tarea 6: proteger el brote y llevarlo a la luz.",
+          "channel": "radio",
+          "emotion": "decidido",
+          "interference": 0.4,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "¿Quién te ha dado esa orden?",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.4,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Nadie. Me la he dado yo.",
+          "channel": "radio",
+          "emotion": "decidido",
+          "interference": 0.4,
+          "duration": 0.0,
+          "sfx": ""
+        }
+      ]
+    },
+    {
+      "id": "c2_09_puertas_ascensor",
+      "chapter": "cap2",
+      "trigger": {
+        "type": "evento",
+        "character": "Volt",
+        "where": "Cierre del capítulo: se abren las puertas del ascensor (aún sin energía para subir)."
+      },
+      "mode": "ambiente",
+      "once": true,
+      "randomLine": false,
+      "requires": [],
+      "sets": [],
+      "note": "",
+      "lines": [
+        {
+          "speaker": "VOLT",
+          "text": "Las puertas del ascensor se abren. La doctora Aina se fue por aquí el último día.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.4,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "¿Crees que volverá?",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.4,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Antes esperaba «mañana». Ahora espero otra cosa.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.4,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "¿El qué?",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.4,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Que alguien vea la luz cuando vuelva. Aunque no sea ella.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.4,
+          "duration": 0.0,
+          "sfx": ""
+        }
+      ]
+    },
+    {
+      "id": "c3_01_cim_glacat",
+      "chapter": "cap3",
+      "trigger": {
+        "type": "zona",
+        "character": "Nil",
+        "where": "Inicio del Cim Glaçat (primer tramo de hielo)."
+      },
+      "mode": "ambiente",
+      "once": true,
+      "randomLine": false,
+      "requires": [],
+      "sets": [],
+      "note": "",
+      "lines": [
+        {
+          "speaker": "NIL",
+          "text": "Hace un frío que muerde. Este hielo resbala como el jabón.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "Volt, si oyes que me castañean los dientes, no es la radio.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.4,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Anotado. Recomendación: no resbalar.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.4,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "Gracias. ¿Qué haría yo sin ti?",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.4,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Probablemente resbalar.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.4,
+          "duration": 0.0,
+          "sfx": ""
+        }
+      ]
+    },
+    {
+      "id": "c3_02_techo",
+      "chapter": "cap3",
+      "trigger": {
+        "type": "zona",
+        "character": "Volt",
+        "where": "Primer techo metálico del Nucli (Volt camina boca abajo)."
+      },
+      "mode": "ambiente",
+      "once": true,
+      "randomLine": false,
+      "requires": [],
+      "sets": [],
+      "note": "",
+      "lines": [
+        {
+          "speaker": "VOLT",
+          "text": "Botas magnéticas activadas. El mundo está del revés.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Tú arriba, en la montaña. Yo abajo, caminando por el techo. Es como si nos miráramos desde los dos lados del mismo suelo.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.4,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "Entonces estamos más cerca de lo que parece.",
+          "channel": "radio",
+          "emotion": "feliz",
+          "interference": 0.4,
+          "duration": 0.0,
+          "sfx": ""
+        }
+      ]
+    },
+    {
+      "id": "c3_03_bateria_critica",
+      "chapter": "cap3",
+      "trigger": {
+        "type": "zona",
+        "character": "Volt",
+        "where": "Tramo oscuro del Nucli, lejos de un cargador. Batería forzada al 9 %."
+      },
+      "mode": "cinematica",
+      "once": true,
+      "randomLine": false,
+      "requires": [
+        "tarea_6"
+      ],
+      "sets": [
+        "sacrificio_volt"
+      ],
+      "note": "Al acabar: linterna al mínimo hasta el siguiente cargador (tramo corto y justo).",
+      "lines": [
+        {
+          "speaker": "VOLT",
+          "text": "Bip... bip... Batería: 9 %.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.5,
+          "duration": 0.0,
+          "sfx": "bip_bateria"
+        },
+        {
+          "speaker": "VOLT",
+          "text": "La cápsula pierde calor. La planta se enfría.",
+          "channel": "radio",
+          "emotion": "miedo",
+          "interference": 0.5,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Opción A: mantener la linterna. Opción B: pasar mi energía a la cápsula.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.5,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "¿Y si eliges la B? ¿Qué te pasa a ti?",
+          "channel": "radio",
+          "emotion": "miedo",
+          "interference": 0.5,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Al 0 %, esta unidad se detiene.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.5,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "¿Y luego?",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.5,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Luego no hay luego.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.5,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "Escúchame. La estación tiene un cargador en cada nivel, me lo dijiste tú. No estás solo. Yo te guío.",
+          "channel": "radio",
+          "emotion": "decidido",
+          "interference": 0.5,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Pasando energía a la cápsula. Linterna al mínimo.",
+          "channel": "radio",
+          "emotion": "decidido",
+          "interference": 0.5,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Nil. Si me paro... cuéntale a la planta cómo es el cielo.",
+          "channel": "radio",
+          "emotion": "triste",
+          "interference": 0.5,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "No te vas a parar. Se lo vas a contar tú.",
+          "channel": "radio",
+          "emotion": "decidido",
+          "interference": 0.5,
+          "duration": 0.0,
+          "sfx": ""
+        }
+      ]
+    },
+    {
+      "id": "c3_04_cargador_salvado",
+      "chapter": "cap3",
+      "trigger": {
+        "type": "interactuar",
+        "character": "Volt",
+        "where": "Cargador al final del tramo oscuro."
+      },
+      "mode": "ambiente",
+      "once": true,
+      "randomLine": false,
+      "requires": [
+        "sacrificio_volt"
+      ],
+      "sets": [],
+      "note": "",
+      "lines": [
+        {
+          "speaker": "VOLT",
+          "text": "Carga... 12... 40... 100 %. Planta: estable. Esta unidad: estable.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": "carga"
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Nil. Gracias. Se dice así, ¿verdad?",
+          "channel": "radio",
+          "emotion": "feliz",
+          "interference": 0.4,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "Se dice así.",
+          "channel": "radio",
+          "emotion": "feliz",
+          "interference": 0.4,
+          "duration": 0.0,
+          "sfx": ""
+        }
+      ]
+    },
+    {
+      "id": "c3_05_ascensor",
+      "chapter": "cap3",
+      "trigger": {
+        "type": "evento",
+        "character": "Cualquiera",
+        "where": "Al reactivar el ascensor (sistema 4)."
+      },
+      "mode": "ambiente",
+      "once": true,
+      "randomLine": false,
+      "requires": [],
+      "sets": [
+        "sistema_4"
+      ],
+      "note": "",
+      "lines": [
+        {
+          "speaker": "ESTACION",
+          "text": "SISTEMA 4/5 · ASCENSOR: RESTABLECIDO.",
+          "channel": "terminal",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": "sistema_ok"
+        },
+        {
+          "speaker": "NIL",
+          "text": "¡Las luces del ascensor! Las veo desde la ladera.",
+          "channel": "radio",
+          "emotion": "sorpresa",
+          "interference": 0.4,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Es la primera vez que algo que hago yo llega hasta ti.",
+          "channel": "radio",
+          "emotion": "feliz",
+          "interference": 0.4,
+          "duration": 0.0,
+          "sfx": ""
+        }
+      ]
+    },
+    {
+      "id": "c3_06_cupula_cerrada",
+      "chapter": "cap3",
+      "trigger": {
+        "type": "zona",
+        "character": "Nil",
+        "where": "Llegada a la cúpula del observatorio (cerrada)."
+      },
+      "mode": "cinematica",
+      "once": true,
+      "randomLine": false,
+      "requires": [],
+      "sets": [
+        "nil_cupula"
+      ],
+      "note": "Cambio de motivación: «subo por mi padre» → «subo porque yo también quiero verlo».",
+      "lines": [
+        {
+          "speaker": "NIL",
+          "text": "El observatorio. Papá, estoy aquí. Estoy aquí de verdad.",
+          "channel": "local",
+          "emotion": "sorpresa",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "Y la cúpula, cerrada. Claro. En esta montaña nada es fácil.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "¿Sabes qué, Volt? Empecé a subir por él. Para terminar su viaje.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.4,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "Pero ahora quiero verlo yo. Quiero ver ese cielo con mis propios ojos.",
+          "channel": "radio",
+          "emotion": "decidido",
+          "interference": 0.4,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Registro actualizado. Motivo de Nil: Nil.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.4,
+          "duration": 0.0,
+          "sfx": ""
+        }
+      ]
+    },
+    {
+      "id": "c3_07_comunicaciones",
+      "chapter": "cap3",
+      "trigger": {
+        "type": "evento",
+        "character": "Volt",
+        "where": "Al reactivar las comunicaciones (sistema 5). La radio queda limpia."
+      },
+      "mode": "cinematica",
+      "once": true,
+      "randomLine": false,
+      "requires": [],
+      "sets": [
+        "sistema_5"
+      ],
+      "note": "A partir de aquí, interferencia 0 en todas las líneas de radio.",
+      "lines": [
+        {
+          "speaker": "ESTACION",
+          "text": "SISTEMA 5/5 · COMUNICACIONES: RESTABLECIDAS.",
+          "channel": "terminal",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": "sistema_ok"
+        },
+        {
+          "speaker": "NIL",
+          "text": "¿Volt?",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Te oigo. Sin ruido. Te oigo de verdad.",
+          "channel": "radio",
+          "emotion": "feliz",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "Tienes una voz... distinta. Más pequeña de lo que me imaginaba.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Tú suenas más cansado de lo que me imaginaba.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Lista de la doctora Aina: 5 de 5. Completada.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "...¿Y ahora qué hace esta unidad?",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "Lo que tú quieras.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "La tarea 6 sigue abierta.",
+          "channel": "radio",
+          "emotion": "decidido",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        }
+      ]
+    },
+    {
+      "id": "c3_08_planta",
+      "chapter": "cap3",
+      "trigger": {
+        "type": "zona",
+        "character": "Volt",
+        "where": "Pasillo hacia el eje central (la semilla ya es planta)."
+      },
+      "mode": "ambiente",
+      "once": true,
+      "randomLine": false,
+      "requires": [],
+      "sets": [
+        "semilla_etapa_3"
+      ],
+      "note": "Etapa visual de la semilla: PLANTA.",
+      "lines": [
+        {
+          "speaker": "VOLT",
+          "text": "La planta ya tiene cuatro hojas. Las he contado. Como antes.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Pero se inclina hacia arriba. Busca algo que aquí no hay.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "Busca el sol. Como todos.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        }
+      ]
+    },
+    {
+      "id": "c3_09_hacia_sala",
+      "chapter": "cap3",
+      "trigger": {
+        "type": "zona",
+        "character": "Cualquiera",
+        "where": "Puerta de la Sala de Control (Volt) / trampilla de la cúpula (Nil)."
+      },
+      "mode": "ambiente",
+      "once": true,
+      "randomLine": false,
+      "requires": [
+        "sistema_5",
+        "nil_cupula"
+      ],
+      "sets": [],
+      "note": "",
+      "lines": [
+        {
+          "speaker": "ESTACION",
+          "text": "SALA DE CONTROL: JUSTO DEBAJO DE LA CÚPULA DEL OBSERVATORIO.",
+          "channel": "terminal",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Nil. Mi camino termina justo debajo de tus pies.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "Y el mío, justo encima de tu cabeza.",
+          "channel": "radio",
+          "emotion": "feliz",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        }
+      ]
+    },
+    {
+      "id": "fin_01_puzle",
+      "chapter": "final",
+      "trigger": {
+        "type": "zona",
+        "character": "Cualquiera",
+        "where": "Inicio del puzle final combinado."
+      },
+      "mode": "cinematica",
+      "once": true,
+      "randomLine": false,
+      "requires": [],
+      "sets": [],
+      "note": "",
+      "lines": [
+        {
+          "speaker": "VOLT",
+          "text": "Si abres la cúpula, la luz entrará por el eje central.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Yo alinearé los espejos para que baje hasta aquí. Hasta la planta.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "Como siempre: yo desde fuera y tú desde dentro.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Como siempre. Pero esta vez, a la vez.",
+          "channel": "radio",
+          "emotion": "decidido",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        }
+      ]
+    },
+    {
+      "id": "fin_02_cupula_abierta",
+      "chapter": "final",
+      "trigger": {
+        "type": "evento",
+        "character": "Nil",
+        "where": "Al abrir la cúpula del observatorio."
+      },
+      "mode": "ambiente",
+      "once": true,
+      "randomLine": false,
+      "requires": [],
+      "sets": [
+        "cupula_abierta"
+      ],
+      "note": "",
+      "lines": [
+        {
+          "speaker": "NIL",
+          "text": "¡Se abre! Volt, la cúpula se abre... y el cielo...",
+          "channel": "radio",
+          "emotion": "sorpresa",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "Madre mía. El cielo.",
+          "channel": "local",
+          "emotion": "feliz",
+          "interference": 0.0,
+          "duration": 3.5,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "La luz entra en el eje. Alineando el primer espejo.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        }
+      ]
+    },
+    {
+      "id": "fin_03_espejos",
+      "chapter": "final",
+      "trigger": {
+        "type": "evento",
+        "character": "Volt",
+        "where": "Al alinear el último espejo."
+      },
+      "mode": "ambiente",
+      "once": true,
+      "randomLine": false,
+      "requires": [],
+      "sets": [
+        "espejos_alineados"
+      ],
+      "note": "",
+      "lines": [
+        {
+          "speaker": "VOLT",
+          "text": "Espejo tres alineado. La luz baja. Baja de verdad.",
+          "channel": "local",
+          "emotion": "sorpresa",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        }
+      ]
+    },
+    {
+      "id": "fin_04_encuentro",
+      "chapter": "final",
+      "trigger": {
+        "type": "evento",
+        "character": "Cualquiera",
+        "where": "Cinemática: Nil baja por el eje y los dos se ven por primera vez."
+      },
+      "mode": "cinematica",
+      "once": true,
+      "randomLine": false,
+      "requires": [
+        "cupula_abierta",
+        "espejos_alineados"
+      ],
+      "sets": [],
+      "note": "",
+      "lines": [
+        {
+          "speaker": "NIL",
+          "text": "...¿Volt?",
+          "channel": "local",
+          "emotion": "sorpresa",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Nil.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "Eres más pequeño de lo que pensaba.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Y tú eres más alto de lo que sonabas.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "Después de toda una montaña... hola.",
+          "channel": "local",
+          "emotion": "feliz",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Hola. Bip. Hola dos veces, por si acaso.",
+          "channel": "local",
+          "emotion": "feliz",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        }
+      ]
+    },
+    {
+      "id": "fin_05_floracion",
+      "chapter": "final",
+      "trigger": {
+        "type": "evento",
+        "character": "Cualquiera",
+        "where": "Cinemática: la luz toca la planta y florece."
+      },
+      "mode": "cinematica",
+      "once": true,
+      "randomLine": false,
+      "requires": [],
+      "sets": [
+        "semilla_etapa_4"
+      ],
+      "note": "Etapa visual de la semilla: FLOR. Cierra la frase de la hoguera del capítulo 1.",
+      "lines": [
+        {
+          "speaker": "VOLT",
+          "text": "La luz toca la planta.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Nil... se está abriendo.",
+          "channel": "local",
+          "emotion": "sorpresa",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "Es una flor.",
+          "channel": "local",
+          "emotion": "feliz",
+          "interference": 0.0,
+          "duration": 3.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "ESTACION",
+          "text": "LUZ SOLAR DETECTADA. ESTACIÓN AL 100 %. RED DEL VALLE: CONECTANDO...",
+          "channel": "terminal",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Nil. Estoy mirando hacia arriba.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Tenías razón. El techo no se acaba.",
+          "channel": "local",
+          "emotion": "feliz",
+          "interference": 0.0,
+          "duration": 4.0,
+          "sfx": ""
+        }
+      ]
+    },
+    {
+      "id": "fin_06_valle",
+      "chapter": "final",
+      "trigger": {
+        "type": "evento",
+        "character": "Cualquiera",
+        "where": "Cinemática: las luces del valle se encienden una a una."
+      },
+      "mode": "cinematica",
+      "once": true,
+      "randomLine": false,
+      "requires": [],
+      "sets": [],
+      "note": "Única vez que habla el padre: su radio vuelve a funcionar porque el valle vuelve a tener luz.",
+      "lines": [
+        {
+          "speaker": "NIL",
+          "text": "Mira el valle, Volt. Se están encendiendo las luces. Una a una.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "Ahí está mi casa. Esa ventana es la de papá.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "Papá... ¿me oyes? Mira hacia arriba.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "PADRE",
+          "text": "...Te oigo, Nil.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.3,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "PADRE",
+          "text": "Sin luz, esta radio llevaba años muerta. Acaba de encenderse sola.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.3,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "PADRE",
+          "text": "Lo veo. Desde aquí abajo lo veo todo encendido.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.3,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "PADRE",
+          "text": "Llegaste.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.3,
+          "duration": 3.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "Llegamos.",
+          "channel": "radio",
+          "emotion": "feliz",
+          "interference": 0.0,
+          "duration": 3.0,
+          "sfx": ""
+        }
+      ]
+    },
+    {
+      "id": "epi_01_cuaderno",
+      "chapter": "epilogo",
+      "trigger": {
+        "type": "evento",
+        "character": "Nil",
+        "where": "Epílogo: Nil abre el cuaderno en el observatorio."
+      },
+      "mode": "cinematica",
+      "once": true,
+      "randomLine": false,
+      "requires": [],
+      "sets": [],
+      "note": "Nil dibuja el cielo y cierra el cuaderno.",
+      "lines": [
+        {
+          "speaker": "NIL",
+          "text": "La última página está en blanco. Hay algo escrito en la esquina.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "CUADERNO",
+          "text": "Esta página la dejo para quien llegue. Si eres tú, Nil, no me la cuentes. Dibújala.",
+          "channel": "cuaderno",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "...Ya voy, papá.",
+          "channel": "local",
+          "emotion": "triste",
+          "interference": 0.0,
+          "duration": 3.5,
+          "sfx": ""
+        }
+      ]
+    },
+    {
+      "id": "epi_02_volt_flor",
+      "chapter": "epilogo",
+      "trigger": {
+        "type": "evento",
+        "character": "Cualquiera",
+        "where": "Epílogo: Volt deja la flor en el observatorio."
+      },
+      "mode": "cinematica",
+      "once": true,
+      "randomLine": false,
+      "requires": [],
+      "sets": [],
+      "note": "Después: créditos con el tema final.",
+      "lines": [
+        {
+          "speaker": "VOLT",
+          "text": "Dejo la flor aquí, en el observatorio. Donde la luz llega primero.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "¿Y tú? Ya no te queda ninguna tarea.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Me quedo. Alguien tiene que contarle las hojas.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "Has dicho «me quedo». No «esta unidad se queda».",
+          "channel": "local",
+          "emotion": "sorpresa",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "...Bip. Sí. Lo he dicho yo.",
+          "channel": "local",
+          "emotion": "feliz",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "Volveré a verte. Te lo prometo. Y no te digo «mañana».",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Entonces te espero. Esperar se me da bien.",
+          "channel": "local",
+          "emotion": "feliz",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Pero esta vez espero algo que va a llegar.",
+          "channel": "local",
+          "emotion": "feliz",
+          "interference": 0.0,
+          "duration": 4.0,
+          "sfx": ""
+        }
+      ]
+    },
+    {
+      "id": "post_01_avi_roc",
+      "chapter": "epilogo",
+      "trigger": {
+        "type": "interactuar",
+        "character": "Nil",
+        "where": "Después de los créditos: hablar con el Avi Roc en el refugio."
+      },
+      "mode": "ambiente",
+      "once": true,
+      "randomLine": false,
+      "requires": [
+        "semilla_etapa_4"
+      ],
+      "sets": [],
+      "note": "",
+      "lines": [
+        {
+          "speaker": "AVI_ROC",
+          "text": "Toda la montaña brilla. Tu padre baja cada tarde a la plaza solo para mirarla.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "AVI_ROC",
+          "text": "Dice que el cuaderno ya no es suyo. Que ahora es tuyo.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        }
+      ]
+    },
+    {
+      "id": "post_02_invernadero",
+      "chapter": "epilogo",
+      "trigger": {
+        "type": "zona",
+        "character": "Volt",
+        "where": "Después de los créditos: volver al invernadero."
+      },
+      "mode": "ambiente",
+      "once": true,
+      "randomLine": false,
+      "requires": [
+        "semilla_etapa_4"
+      ],
+      "sets": [],
+      "note": "",
+      "lines": [
+        {
+          "speaker": "VOLT",
+          "text": "Invernadero. Plantas vivas: 1.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Pronto habrá más hojas que contar.",
+          "channel": "local",
+          "emotion": "feliz",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        }
+      ]
+    },
+    {
+      "id": "bark_bateria_baja",
+      "chapter": "barks",
+      "trigger": {
+        "type": "evento",
+        "character": "Volt",
+        "where": "Batería de Volt por debajo del 20 %. Llamar con PlayBark."
+      },
+      "mode": "ambiente",
+      "once": false,
+      "randomLine": true,
+      "requires": [],
+      "sets": [],
+      "note": "",
+      "lines": [
+        {
+          "speaker": "VOLT",
+          "text": "Bip. Batería baja.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": "bip_bateria"
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Bip, bip. Necesito un cargador.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": "bip_bateria"
+        },
+        {
+          "speaker": "VOLT",
+          "text": "15 %. No es un número bonito.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": "bip_bateria"
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Si se apaga la linterna, yo no veo nada... y nadie me ve a mí.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": "bip_bateria"
+        }
+      ]
+    },
+    {
+      "id": "bark_recarga",
+      "chapter": "barks",
+      "trigger": {
+        "type": "evento",
+        "character": "Volt",
+        "where": "Al recargar en cualquier cargador (menos el primero)."
+      },
+      "mode": "ambiente",
+      "once": false,
+      "randomLine": true,
+      "requires": [],
+      "sets": [],
+      "note": "",
+      "lines": [
+        {
+          "speaker": "VOLT",
+          "text": "100 %. Como nuevo. Bueno, como viejo, pero lleno.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Bip. Gracias, enchufe.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Carga completa. Semilla: también contenta, creo.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        }
+      ]
+    },
+    {
+      "id": "bark_caidas_nil",
+      "chapter": "barks",
+      "trigger": {
+        "type": "evento",
+        "character": "Nil",
+        "where": "Nil se cae varias veces seguidas en el mismo tramo."
+      },
+      "mode": "ambiente",
+      "once": false,
+      "randomLine": true,
+      "requires": [],
+      "sets": [],
+      "note": "",
+      "lines": [
+        {
+          "speaker": "NIL",
+          "text": "Vale, montaña. Otra vez.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "Seguro que papá también se cayó aquí.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Nil, ¿te has vuelto a caer? Tu radio hace un ruido muy concreto.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "Un intento más. Solo uno.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        }
+      ]
+    },
+    {
+      "id": "bark_caidas_volt",
+      "chapter": "barks",
+      "trigger": {
+        "type": "evento",
+        "character": "Volt",
+        "where": "Volt se cae varias veces seguidas en el mismo tramo."
+      },
+      "mode": "ambiente",
+      "once": false,
+      "randomLine": true,
+      "requires": [],
+      "sets": [],
+      "note": "",
+      "lines": [
+        {
+          "speaker": "VOLT",
+          "text": "Recalculando salto.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "Volt, ¿estás bien? Ha sonado «clonc».",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Esta unidad prefiere el suelo cuando está debajo.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        }
+      ]
+    },
+    {
+      "id": "bark_cambio",
+      "chapter": "barks",
+      "trigger": {
+        "type": "evento",
+        "character": "Cualquiera",
+        "where": "Al pulsar Q para cambiar de personaje (con poca probabilidad)."
+      },
+      "mode": "ambiente",
+      "once": false,
+      "randomLine": true,
+      "requires": [
+        "primer_contacto"
+      ],
+      "sets": [],
+      "note": "",
+      "lines": [
+        {
+          "speaker": "NIL",
+          "text": "Tu turno, Volt.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Sin prisa, Nil. Yo vigilo la semilla.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "NIL",
+          "text": "A ver qué hace el robot.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "VOLT",
+          "text": "Bip. Aquí sigo.",
+          "channel": "radio",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        }
+      ]
+    },
+    {
+      "id": "bark_avi_roc_mejora",
+      "chapter": "barks",
+      "trigger": {
+        "type": "evento",
+        "character": "Nil",
+        "where": "Al comprar una mejora en el refugio."
+      },
+      "mode": "ambiente",
+      "once": false,
+      "randomLine": true,
+      "requires": [],
+      "sets": [],
+      "note": "",
+      "lines": [
+        {
+          "speaker": "AVI_ROC",
+          "text": "Buena elección. Tu padre habría escogido la misma.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "AVI_ROC",
+          "text": "La montaña no regala nada, pero esto ayuda.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        },
+        {
+          "speaker": "AVI_ROC",
+          "text": "Vuelve cuando quieras. El fuego siempre está encendido.",
+          "channel": "local",
+          "emotion": "neutral",
+          "interference": 0.0,
+          "duration": 0.0,
+          "sfx": ""
+        }
+      ]
+    }
+  ]
+}
