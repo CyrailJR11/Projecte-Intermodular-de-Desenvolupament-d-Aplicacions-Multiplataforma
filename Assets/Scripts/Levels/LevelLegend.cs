@@ -13,6 +13,26 @@ namespace EntreDosMons.Levels
         public const char Checkpoint = 'C';
         public const char Exit = 'E';
 
+        // Objetos con comportamiento (además de su tile, el LevelBuilder crea el objeto que los hace funcionar).
+        public const char Spikes = '^';        // pinchos: quitan una vida (apuntan hacia abajo si hay suelo encima)
+        public const char Box = 'X';           // caja de madera que se empuja
+        public const char Door = 'D';          // compuerta (columna de 'D'); la abre la palanca más cercana
+        public const char Lever = 'p';         // palanca: E para accionarla
+        public const char Charger = 'c';       // cargador de batería de Volt (también es su checkpoint)
+        public const char SwingAnchor = 'P';   // anclaje de una cuerda-péndulo para Nil
+        public const char WaterSurface = '~';  // agua (superficie)
+        public const char WaterFill = 'w';     // agua (fondo)
+        public const char Rope = '|';          // cuerda vertical para trepar (Nil)
+        public const char RopeAnchor = 'T';    // anclaje de la cuerda vertical (también se trepa)
+        public const char Ladder = 'e';        // escalera de madera (Nil y Volt)
+        public const char OneWay = '-';        // plataforma de madera: se atraviesa desde abajo, abajo + saltar para bajar
+
+        // Tiles de los objetos nuevos (los busca el LevelBuilder por nombre).
+        public const string SpikesExterior = "ext_punxes";
+        public const string SpikesCave = "cova_punxes";
+        public const string DoorTile = "cova_comporta";
+        public const string BoxTile = "ext_caixa_fusta";
+
         // Tiles con bordes automáticos: el constructor elige la pieza izquierda, central o derecha mirando a los vecinos.
         public static readonly Dictionary<char, string> EdgeTiles = new Dictionary<char, string>
         {
@@ -26,7 +46,6 @@ namespace EntreDosMons.Levels
             // Exterior (Nil)
             { '#', ("ext_terra_ple", LevelLayer.Suelo) },
             { 'B', ("ext_bloc_pedra", LevelLayer.Suelo) },
-            { 'X', ("ext_caixa_fusta", LevelLayer.Suelo) },
             { '~', ("ext_aigua_superficie", LevelLayer.Decoracion) },
             { 'w', ("ext_aigua_ple", LevelLayer.Decoracion) },
             { '|', ("ext_corda", LevelLayer.Decoracion) },
