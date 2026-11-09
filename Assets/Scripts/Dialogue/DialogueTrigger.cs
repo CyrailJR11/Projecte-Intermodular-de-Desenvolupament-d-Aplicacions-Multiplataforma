@@ -27,6 +27,14 @@ namespace EntreDosMons.Dialogue
 
         public string DialogueId => dialogueId;
 
+        // Para crear la zona desde código (LevelBuilder).
+        public void Setup(string id, Who who, Activation mode)
+        {
+            dialogueId = id;
+            character = who;
+            activation = mode;
+        }
+
         bool inside;
 
         void Reset()

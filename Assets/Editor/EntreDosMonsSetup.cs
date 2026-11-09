@@ -7,10 +7,12 @@ using UnityEngine.Rendering.Universal;
 using UnityEngine.Tilemaps;
 using EntreDosMons;
 using EntreDosMons.Dialogue;
+using EntreDosMons.Levels;
 
 // Menú "Entre Dos Mons" para montar el proyecto en dos clics:
 //   1. Crear tiles y paletas: un Tile por cada PNG de Assets/Art/Tiles y dos Tile Palettes (Exterior y Coves).
 //   2. Preparar escena de prueba: Grid con 3 Tilemaps, suelo de prueba, cámara pixel perfect, Nil, Volt y diálogos.
+//   3. Usar niveles por código: añade el LevelBuilder, que construye los niveles de LevelLibrary al darle a Play.
 public static class EntreDosMonsSetup
 {
     const string TilesFolder = "Assets/Art/Tiles";
@@ -173,6 +175,59 @@ public static class EntreDosMonsSetup
         Selection.activeGameObject = nil.gameObject;
         UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(grid.scene);
         Debug.Log("Entre Dos Mons: escena lista. Dale a Play: A/D para andar, Espacio para saltar, Q para cambiar a Volt, F para invertir su gravedad.");
+    }
+
+    [MenuItem("Entre Dos Mons/3. Usar niveles por código")]
+    public static void SetupLevelBuilder()
+    {
+        Tilemap ground = null, decoration = null, background = null;
+        foreach (Tilemap tm in Object.FindObjectsByType<Tilemap>(FindObjectsSortMode.None))
+        {
+            if (tm.name == "Suelo") ground = tm;
+            else if (tm.name == "Decoracion") decoration = tm;
+            else if (tm.name == "Fondo") background = tm;
+        }
+        if (ground == null || decoration == null || background == null)
+        {
+            Debug.LogError("Entre Dos Mons: no encuentro los Tilemaps Suelo, Decoracion y Fondo. Usa antes la opción 2.");
+            return;
+        }
+
+        var tiles = new List<TileBase>();
+        foreach (string guid in AssetDatabase.FindAssets("t:Tile", new[] { TileAssetsFolder }))
+            tiles.Add(AssetDatabase.LoadAssetAtPath<TileBase>(AssetDatabase.GUIDToAssetPath(guid)));
+        if (tiles.Count == 0)
+        {
+            CreateTilesAndPalettes();
+            foreach (string guid in AssetDatabase.FindAssets("t:Tile", new[] { TileAssetsFolder }))
+                tiles.Add(AssetDatabase.LoadAssetAtPath<TileBase>(AssetDatabase.GUIDToAssetPath(guid)));
+        }
+
+        var builder = Object.FindAnyObjectByType<LevelBuilder>();
+        if (builder == null)
+        {
+            var go = new GameObject("Niveles");
+            Undo.RegisterCreatedObjectUndo(go, "Usar niveles por código");
+            builder = go.AddComponent<LevelBuilder>();
+        }
+        Undo.RecordObject(builder, "Usar niveles por código");
+        builder.ground = ground;
+        builder.decoration = decoration;
+        builder.background = background;
+        builder.tiles = tiles.ToArray();
+        builder.cameraFollow = Object.FindAnyObjectByType<CameraFollow2D>();
+        foreach (PlayerController2D p in Object.FindObjectsByType<PlayerController2D>(FindObjectsSortMode.None))
+        {
+            if (p.characterName == "Nil") builder.nil = p;
+            else if (p.characterName == "Volt") builder.volt = p;
+        }
+
+        // Vista previa en el editor (el suelo de prueba de la opción 2 se borra). Al darle a Play se vuelve a construir.
+        builder.Build(builder.startLevel);
+        EditorUtility.SetDirty(builder);
+        Selection.activeGameObject = builder.gameObject;
+        UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(builder.gameObject.scene);
+        Debug.Log("Entre Dos Mons: LevelBuilder listo. Los mapas están en Assets/Scripts/Levels/LevelLibrary.cs.");
     }
 
     static Tilemap CreateTilemap(Transform parent, string name, int sortingOrder)
