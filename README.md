@@ -199,7 +199,7 @@ Somos **Pablo Abad Ortega** y **Carlos Rodríguez**, un pequeño estudio indie d
 
 | | Rol |
 |---|---|
-| **Pablo Abad Ortega** | Diseño, arte e interfaz |
+| **Pablo Abad Ortega** ([@pabloabaad25](https://github.com/pabloabaad25)) | Diseño, arte e interfaz |
 | **Carlos Rodríguez** ([@CyrailJR11](https://github.com/CyrailJR11)) | Programación, producción y sonido |
 
 📸 Síguenos en Instagram: [@pcpixelstudio_oficial](https://www.instagram.com/pcpixelstudio_oficial/)<br>
