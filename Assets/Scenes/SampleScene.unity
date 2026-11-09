@@ -7793,6 +7793,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ef05a97d060be4c488b8e2fc73d3b77d, type: 2}
   - {fileID: 11400000, guid: f164a47e32cf92849bfd3281b92c60a4, type: 2}
   - {fileID: 11400000, guid: 42ea3c7ed679d6345a34805813f3e1b7, type: 2}
+  - {fileID: 11400000, guid: 56f04407eae74d34872584262238e2bc, type: 2}
+  - {fileID: 11400000, guid: ab18e5fc289f4ba587b4b70fe90f994d, type: 2}
+  - {fileID: 11400000, guid: 842a3d119f5e47a489e4a71fc8394c22, type: 2}
   nil: {fileID: 1302851523}
   volt: {fileID: 643327488}
   cameraFollow: {fileID: 519420033}
