@@ -202,7 +202,7 @@ Somos **Pablo Abad Ortega** y **Carlos Rodríguez**, un pequeño estudio indie d
 | **Pablo Abad Ortega** | Diseño, arte e interfaz |
 | **Carlos Rodríguez** ([@CyrailJR11](https://github.com/CyrailJR11)) | Programación, producción y sonido |
 
-📸 Síguenos en Instagram: [@pcpixelstudio_oficial](https://www.instagram.com/pcpixelstudio_oficial/)
+📸 Síguenos en Instagram: [@pcpixelstudio_oficial](https://www.instagram.com/pcpixelstudio_oficial/)<br>
 🕹️ Página del juego: [pabloabaad25.itch.io/entre-dos-mundos](https://pabloabaad25.itch.io/entre-dos-mundos)
 
 <div align="center">
