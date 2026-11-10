@@ -174,7 +174,7 @@ public static class EntreDosMonsSetup
 
         Selection.activeGameObject = nil.gameObject;
         UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(grid.scene);
-        Debug.Log("Entre Dos Mons: escena lista. Dale a Play: A/D para andar, Espacio para saltar, Q para cambiar a Volt, F para invertir su gravedad.");
+        Debug.Log("Entre Dos Mons: escena lista. Dale a Play: A/D andar, Espacio saltar, W/S trepar, Q cambiar a Volt, F invertir su gravedad (otra vez F para volver), L linterna, E interactuar.");
     }
 
     [MenuItem("Entre Dos Mons/3. Usar niveles por código")]
@@ -214,7 +214,7 @@ public static class EntreDosMonsSetup
         builder.ground = ground;
         builder.decoration = decoration;
         builder.background = background;
-        builder.tiles = tiles.ToArray();
+        builder.tiles = tiles.ToArray();   // incluye los tiles nuevos: ext_punxes, cova_punxes y cova_comporta
         builder.cameraFollow = Object.FindAnyObjectByType<CameraFollow2D>();
         foreach (PlayerController2D p in Object.FindObjectsByType<PlayerController2D>(FindObjectsSortMode.None))
         {
@@ -263,6 +263,17 @@ public static class EntreDosMonsSetup
         player.characterName = name;
         player.groundLayers = groundMask;
         player.canFlipGravity = canFlipGravity;
+        // Nil trepa cuerdas y nada; Volt solo escaleras y se hunde en el agua (gasta batería).
+        player.canClimbRopes = !canFlipGravity;
+        player.canSwim = !canFlipGravity;
+        // Vidas, respiración, batería y linterna (el LevelBuilder también las añade al darle a Play si faltan).
+        go.AddComponent<PlayerHealth>();
+        if (canFlipGravity)
+        {
+            go.AddComponent<VoltBattery>();
+            go.AddComponent<VoltFlashlight>();
+        }
+        else go.AddComponent<PlayerBreath>();
 
         var anim = go.AddComponent<SimpleSpriteAnimator>();
         anim.idleFrames = idle;
