@@ -25,4 +25,14 @@ public class EntreDosMonsTileImporter : AssetPostprocessor
         ti.alphaIsTransparency = true;
         ti.wrapMode = TextureWrapMode.Clamp;
     }
+
+    // Fuentes de Assets/Resources/Fonts: la pixel (Press Start 2P) sin suavizado para que se vea nítida.
+    void OnPreprocessAsset()
+    {
+        if (!(assetImporter is TrueTypeFontImporter font) || !assetImporter.importSettingsMissing) return;
+        if (!assetPath.Replace('\\', '/').Contains("/Resources/Fonts/")) return;
+        font.fontTextureCase = FontTextureCase.Dynamic;
+        font.includeFontData = true;
+        if (assetPath.Contains("PressStart2P")) font.fontRenderingMode = FontRenderingMode.HintedRaster;
+    }
 }

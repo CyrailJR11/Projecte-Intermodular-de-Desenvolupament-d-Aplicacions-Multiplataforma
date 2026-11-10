@@ -1,6 +1,23 @@
-# Paquete de arranque · Entre Dos Mons (Unity 6, URP 2D)
+# Entre Dos Mons · Proyecto Unity
 
-Copia la carpeta `Assets/` dentro de tu proyecto (se mezcla con la tuya) y usa el menú **Entre Dos Mons**:
+## Cómo abrirlo
+1. Instala **Unity 6.3 LTS (6000.3.23f1)** desde Unity Hub (con el módulo de Windows/Mac Build Support si vais a exportar).
+2. Unity Hub > **Add > Add project from disk** y elige esta carpeta (la que tiene `Assets/`, `Packages/` y `ProjectSettings/`).
+   La primera vez tarda unos minutos: Unity descarga los paquetes (URP 2D, Tilemap, Input System) y crea la carpeta `Library/`.
+3. Abre `Assets/Scenes/SampleScene.unity` y dale a **Play**. El nivel se construye por código desde `Assets/Scripts/Levels/LevelLibrary.cs`.
+   Si la escena saliera vacía, usa el menú **Entre Dos Mons > 2** y luego **> 3** (ver abajo).
+
+Novedades de esta versión:
+- **Diálogos en pantalla**: si no hay un `DialogueUI` (el de TextMeshPro), el `LevelBuilder` crea por código un panel inferior
+  (`Scripts/UI/DialoguePanel.cs`) con el nombre del personaje en su color, el texto letra a letra, efecto de radio con interferencias
+  y flechita en las cinemáticas (E / Espacio / Enter / clic para seguir). Los diálogos salen de `Resources/Dialogues/dialogos_es.json`.
+  Las frases que solo suenan una vez se guardan en PlayerPrefs: para volver a oírlas, *Edit > Clear All PlayerPrefs*.
+- **Tipografía oficial** en el HUD y los diálogos: *Press Start 2P* (nombres, números) y *Atkinson Hyperlegible* (frases),
+  en `Assets/Resources/Fonts/` (licencia OFL, se pueden usar en el juego). `Scripts/UI/GameFonts.cs` las carga.
+
+## Menú Entre Dos Mons
+
+Para montar una escena nueva desde cero, usa el menú **Entre Dos Mons**:
 
 1. **Entre Dos Mons > 1. Crear tiles y paletas**: crea un Tile por cada PNG de `Assets/Art/Tiles` y dos paletas
    (`Assets/Art/Palettes/Exterior` y `Coves`). Ábrelas en *Window > 2D > Tile Palette*.

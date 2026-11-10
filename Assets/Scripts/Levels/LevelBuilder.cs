@@ -91,6 +91,11 @@ namespace EntreDosMons.Levels
             hud.nil = nil;
             hud.volt = volt;
             Ensure<LevelLighting>(this);
+
+            // Diálogos: gestor + panel creado por código (si no habéis montado un DialogueUI con TextMeshPro).
+            if (FindAnyObjectByType<DialogueManager>() == null) new GameObject("Dialogos").AddComponent<DialogueManager>();
+            if (FindAnyObjectByType<DialogueUI>() == null && FindAnyObjectByType<DialoguePanel>() == null)
+                new GameObject("Panel de dialogos").AddComponent<DialoguePanel>();
         }
 
         static T Ensure<T>(Component target) where T : Component
@@ -397,7 +402,7 @@ namespace EntreDosMons.Levels
             {
                 if (spot.Symbol != c) continue;
                 // Sin panel de diálogos, una cinemática dejaría al personaje congelado: no se crean las zonas.
-                if (FindAnyObjectByType<DialogueUI>() == null) return true;
+                if (FindAnyObjectByType<DialogueUI>() == null && FindAnyObjectByType<DialoguePanel>() == null) return true;
                 Vector3 offset = new Vector3(0f, (spot.Size.y - 1f) / 2f, 0f);
                 GameObject zone = CreateZone("Dialogo " + spot.Id, center + offset, spot.Size);
                 zone.AddComponent<DialogueTrigger>().Setup(spot.Id, spot.Who, spot.Activation);

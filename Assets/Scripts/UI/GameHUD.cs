@@ -40,7 +40,7 @@ namespace EntreDosMons.UI
 
         void Awake()
         {
-            font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            font = GameFonts.Pixel;   // Press Start 2P (tipografía oficial)
             heartSprite = MakeSprite(".##.##.", "#######", "#######", ".#####.", "..###..", "...#...");
             bubbleSprite = MakeSprite(".###.", "#..##", "#...#", "#...#", ".###.");
             boltSprite = MakeSprite("..##", ".##.", "####", ".##.", "##..");
@@ -92,7 +92,8 @@ namespace EntreDosMons.UI
             nilPanel = BuildPanel("Nil", new Vector2(0f, 1f), new Vector2(8f, -8f), "NIL", bubbleSprite, Water);
             voltPanel = BuildPanel("Volt", new Vector2(1f, 1f), new Vector2(-8f, -8f), "VOLT", boltSprite, Green);
 
-            message = MakeText("Aviso", transform, 12, TextAnchor.MiddleCenter);
+            message = MakeText("Aviso", transform, 14, TextAnchor.MiddleCenter);
+            message.font = GameFonts.Bold;   // frase larga: Atkinson Hyperlegible
             RectTransform mr = message.rectTransform;
             mr.anchorMin = mr.anchorMax = mr.pivot = new Vector2(0.5f, 1f);
             mr.anchoredPosition = new Vector2(0f, -64f);
@@ -111,7 +112,7 @@ namespace EntreDosMons.UI
             float side = right ? -6f : 6f;
             Vector2 anchor = new Vector2(right ? 1f : 0f, 1f);
 
-            p.label = MakeText("Nombre", root, 10, align);
+            p.label = MakeText("Nombre", root, 8, align);
             Place(p.label.rectTransform, anchor, new Vector2(side, -3f), new Vector2(120f, 14f));
             p.label.text = title;
 
