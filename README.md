@@ -159,6 +159,20 @@ git clone -b upload/entre-dos-mons https://github.com/CyrailJR11/Projecte-Interm
    - **3. Usar niveles por código**: monta el nivel a partir de `LevelLibrary`.
 4. Pulsa ▶️ **Play**.
 
+### 🖥️ Pantalla (2560×1440 y otras)
+
+El juego se dibuja a **640×360** y se amplía con la Pixel Perfect Camera (`Core/ScreenSetup.cs`):
+
+| Pantalla | Ampliación | Resultado |
+|---|---|---|
+| 2560×1440 | ×4 exacto | Nítido y sin bordes |
+| 1920×1080 | ×3 exacto | Nítido y sin bordes |
+| 3840×2160 | ×6 exacto | Nítido y sin bordes |
+| Otras | múltiplo entero + estirado mínimo | Sin bandas negras |
+
+- En la versión compilada arranca a pantalla completa con la resolución del monitor.
+- En el Editor, en la pestaña **Game**, elige **2560x1440** en el desplegable de resolución (o añádela con **+**) y deja la escala en **1x**. Desmarca *Low Resolution Aspect Ratios*.
+
 ---
 
 ## 📁 Estructura
