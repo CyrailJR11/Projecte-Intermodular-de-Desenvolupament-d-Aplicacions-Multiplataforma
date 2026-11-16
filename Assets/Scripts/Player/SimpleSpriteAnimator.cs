@@ -7,15 +7,23 @@ namespace EntreDosMons
     [RequireComponent(typeof(SpriteRenderer))]
     public class SimpleSpriteAnimator : MonoBehaviour
     {
-        public Sprite[] idleFrames;
-        public Sprite[] walkFrames;
-        public Sprite[] airFrames;
+        [SerializeField] Sprite[] idleFrames;
+        [SerializeField] Sprite[] walkFrames;
+        [SerializeField] Sprite[] airFrames;
         public float walkFramesPerSecond = 8f;
+
+        // Lo usa la fábrica de prefabs para rellenar los fotogramas.
+        public void SetFrames(Sprite[] idle, Sprite[] walk, Sprite[] air)
+        {
+            idleFrames = idle;
+            walkFrames = walk;
+            airFrames = air;
+        }
         public float idleFramesPerSecond = 2f;
 
         SpriteRenderer sr;
         Rigidbody2D rb;
-        PlayerController2D player;
+        PlayerCharacter player;
         Sprite[] current;
         float timer;
         int frame;
@@ -24,7 +32,7 @@ namespace EntreDosMons
         {
             sr = GetComponent<SpriteRenderer>();
             rb = GetComponentInParent<Rigidbody2D>();
-            player = GetComponentInParent<PlayerController2D>();
+            player = GetComponentInParent<PlayerCharacter>();
         }
 
         void Update()

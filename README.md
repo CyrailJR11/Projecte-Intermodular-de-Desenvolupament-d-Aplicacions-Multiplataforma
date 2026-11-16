@@ -171,13 +171,20 @@ Assets/
 │   └── Tiles/        32 tiles 32×32 (ext_* y cova_*)
 ├── Editor/           Menú "Entre Dos Mons" e importador de pixel art
 ├── Resources/
-│   └── Dialogues/    dialogos_es.json (guion de Nil y Volt)
-├── Scenes/           SampleScene
-└── Scripts/
+│   ├── Dialogues/    dialogos_es.json (guion de Nil y Volt)
+│   └── Prefabs/      Nil, Volt, Caja, Valvula, Terminal, PlacaPresion… (los crea el menú 4)
+├── Scenes/           SampleScene (sin personajes fijos: el LevelBuilder los instancia)
+├── Tests/            EditMode (flujo de niveles) y PlayMode (físicas de cajas, placas, montacargas)
+└── Scripts/          ensamblado EntreDosMons.asmdef
+    ├── Core/         interfaces (IInteractable, ISignalReceiver, IPushable…), WorldMap, entrada
+    ├── Characters/   PlayerCharacter (abstracta) → NilCharacter / VoltCharacter, vidas, aire, batería
+    ├── Mechanics/    Signals/ (válvula, terminal, placa, cristal → compuerta, montacargas, desagüe), cajas…
+    ├── Levels/       LevelLibrary, LevelBuilder, Prefabs/ y Validation/ (solucionador automático)
     ├── Dialogue/     DialogueManager, DialogueUI, DialogueTrigger…
-    ├── Levels/       LevelLibrary, LevelLegend, LevelBuilder, LevelExit
-    └── Player/       PlayerController2D, CharacterSwitcher, CameraFollow2D…
+    └── Player/       CharacterSwitcher, CameraFollow2D, GameInput…
 ```
+
+Vistas previas de los niveles con su solución: [`Docs/niveles/`](Docs/niveles).
 
 ---
 

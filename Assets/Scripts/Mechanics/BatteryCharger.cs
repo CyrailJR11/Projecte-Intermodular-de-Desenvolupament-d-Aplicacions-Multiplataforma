@@ -8,20 +8,23 @@ namespace EntreDosMons.Mechanics
     public class BatteryCharger : MonoBehaviour
     {
         [Tooltip("% por segundo.")]
-        public float chargeRate = 30f;
-        public Light2D glow;
+        [SerializeField] float chargeRate = 30f;
+        [SerializeField] Light2D glow;
 
         float pulse;
 
-        void Reset() => GetComponent<Collider2D>().isTrigger = true;
+        void Awake()
+        {
+            GetComponent<Collider2D>().isTrigger = true;
+            if (glow == null) glow = GetComponentInChildren<Light2D>();
+        }
 
         void OnTriggerEnter2D(Collider2D other)
         {
             var battery = other.GetComponentInParent<VoltBattery>();
             if (battery == null) return;
-            var player = battery.GetComponent<PlayerController2D>();
-            if (player != null) player.SetCheckpoint(transform.position);
-            if (battery.Charge < battery.maxCharge) GameAudio.Play("carga");
+            battery.GetComponent<PlayerCharacter>().SetCheckpoint(transform.position);
+            if (battery.Normalized < 1f) GameAudio.Play("carga");
         }
 
         void OnTriggerStay2D(Collider2D other)

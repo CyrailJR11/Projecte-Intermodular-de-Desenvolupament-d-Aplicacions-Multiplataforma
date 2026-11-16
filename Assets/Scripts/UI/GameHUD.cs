@@ -6,12 +6,24 @@ namespace EntreDosMons.UI
     //   · Arriba a la izquierda, Nil: vidas (corazones) y respiración (solo aparece cuando le falta aire).
     //   · Arriba a la derecha, Volt: vidas, batería en % (verde/amarillo/naranja, parpadea al final) y si la linterna va encendida.
     //   · El nombre del personaje que se controla se ve resaltado.
-    //   · En el centro, avisos cortos: "-1 vida", "Sin vidas: se reinicia el nivel".
+    //   · En el centro, avisos cortos: "-1 vida", "Volt: no tengo fuerza para esta caja"...
+    //   · Abajo, qué se puede hacer con lo que hay al lado ("E · Girar la válvula") o por qué no.
+    // [POO · Polimorfismo] La barra de cada personaje es su CharacterResource (respiración o batería): el HUD
+    // no sabe cuál es, solo le pide Normalized, HudLabel y HudColor.
     // Los iconos se dibujan en código (pixel art) para no depender de más archivos.
     public class GameHUD : MonoBehaviour
     {
-        public PlayerController2D nil;
-        public PlayerController2D volt;
+        PlayerCharacter nil;
+        PlayerCharacter volt;
+
+        static GameHUD instance;
+
+        // Aviso corto en el centro de la pantalla desde cualquier script (p. ej. Volt al chocar con una caja).
+        public static void Say(string text, float seconds = 2f)
+        {
+            if (instance != null) instance.ShowMessage(text, seconds);
+            else Debug.Log(text);
+        }
 
         static readonly Color Ink = new Color32(0xF5, 0xF0, 0xD8, 0xFF);
         static readonly Color Dim = new Color32(0x4B, 0x63, 0x74, 0xFF);
@@ -36,6 +48,7 @@ namespace EntreDosMons.UI
         Sprite heartSprite, whiteSprite, bubbleSprite, boltSprite;
         CharacterPanel nilPanel, voltPanel;
         UnityEngine.UI.Text message;
+        UnityEngine.UI.Text prompt;
         float messageTimer;
 
         void Awake()
@@ -50,25 +63,27 @@ namespace EntreDosMons.UI
 
         void OnEnable()
         {
-            PlayerHealth.LifeLost += OnLifeLost;
-            PlayerHealth.OutOfLives += OnOutOfLives;
+            instance = this;
+            CharacterHealth.LifeLost += OnLifeLost;
+            CharacterHealth.OutOfLives += OnOutOfLives;
         }
 
         void OnDisable()
         {
-            PlayerHealth.LifeLost -= OnLifeLost;
-            PlayerHealth.OutOfLives -= OnOutOfLives;
+            if (instance == this) instance = null;
+            CharacterHealth.LifeLost -= OnLifeLost;
+            CharacterHealth.OutOfLives -= OnOutOfLives;
         }
 
-        void OnLifeLost(PlayerHealth who, DamageType type)
+        void OnLifeLost(CharacterHealth who, DamageType type)
         {
             if (who.Lives <= 0) return;
             string cause = type == DamageType.Pinchos ? "pinchos" : type == DamageType.Ahogado ? "sin aire"
-                : type == DamageType.Cortocircuito ? "cortocircuito" : "caída";
-            ShowMessage($"{who.Player.characterName}: -1 vida ({cause})", 1.5f);
+                : type == DamageType.Cortocircuito ? "cortocircuito" : "fuera de su mundo";
+            ShowMessage($"{who.Character.DisplayName}: -1 vida ({cause})", 1.5f);
         }
 
-        void OnOutOfLives(PlayerHealth who) => ShowMessage($"{who.Player.characterName} se ha quedado sin vidas. Reiniciando el nivel...", 2.5f);
+        void OnOutOfLives(CharacterHealth who) => ShowMessage($"{who.Character.DisplayName} se ha quedado sin vidas. Reiniciando el nivel...", 2.5f);
 
         public void ShowMessage(string text, float seconds)
         {
@@ -99,6 +114,14 @@ namespace EntreDosMons.UI
             mr.anchoredPosition = new Vector2(0f, -64f);
             mr.sizeDelta = new Vector2(420f, 24f);
             message.enabled = false;
+
+            prompt = MakeText("Accion", transform, 12, TextAnchor.MiddleCenter);
+            prompt.font = GameFonts.Bold;
+            RectTransform pr = prompt.rectTransform;
+            pr.anchorMin = pr.anchorMax = pr.pivot = new Vector2(0.5f, 0f);
+            pr.anchoredPosition = new Vector2(0f, 10f);
+            pr.sizeDelta = new Vector2(420f, 20f);
+            prompt.enabled = false;
         }
 
         CharacterPanel BuildPanel(string name, Vector2 corner, Vector2 position, string title, Sprite icon, Color barColor)
@@ -149,32 +172,9 @@ namespace EntreDosMons.UI
             UpdatePanel(nilPanel, nil);
             UpdatePanel(voltPanel, volt);
 
-            // Respiración de Nil: solo cuando le falta aire.
-            var breath = nil != null ? nil.GetComponent<PlayerBreath>() : null;
-            bool showBreath = breath != null && (!breath.IsFull || nil.IsHeadUnderwater);
-            nilPanel.bar.SetActive(showBreath);
-            if (showBreath)
-            {
-                nilPanel.barFill.fillAmount = breath.Normalized;
-                nilPanel.barFill.color = breath.Normalized < 0.3f ? Orange : Water;
-                nilPanel.barText.text = "AIRE";
-            }
-
-            // Batería de Volt: siempre visible.
-            var battery = volt != null ? volt.GetComponent<VoltBattery>() : null;
-            voltPanel.bar.SetActive(battery != null);
-            if (battery != null)
-            {
-                float n = battery.Normalized;
-                voltPanel.barFill.fillAmount = n;
-                Color c = n > 0.5f ? Green : n > 0.2f ? Highlight : Orange;
-                if (n < 0.1f && Mathf.FloorToInt(Time.unscaledTime * 4f) % 2 == 0) c = Dim;
-                voltPanel.barFill.color = c;
-                var flashlight = volt.GetComponent<VoltFlashlight>();
-                string light = flashlight != null && flashlight.IsLit ? " LUZ" : "";
-                voltPanel.barText.text = (battery.IsCharging ? "+" : "") + Mathf.CeilToInt(battery.Charge) + "%" + light;
-                voltPanel.barIcon.color = battery.IsCharging ? Highlight : Ink;
-            }
+            UpdateBar(nilPanel, nil);
+            UpdateBar(voltPanel, volt);
+            UpdatePrompt();
 
             if (messageTimer > 0f)
             {
@@ -183,12 +183,41 @@ namespace EntreDosMons.UI
             }
         }
 
-        void UpdatePanel(CharacterPanel panel, PlayerController2D player)
+        // [Polimorfismo] Respiración o batería: el HUD solo pregunta al CharacterResource.
+        void UpdateBar(CharacterPanel panel, PlayerCharacter player)
+        {
+            CharacterResource resource = player != null ? player.GetComponent<CharacterResource>() : null;
+            bool show = resource != null && resource.ShowInHud;
+            panel.bar.SetActive(show);
+            if (!show) return;
+            float n = resource.Normalized;
+            panel.barFill.fillAmount = n;
+            Color c = resource.HudColor;
+            if (n < 0.1f && Mathf.FloorToInt(Time.unscaledTime * 4f) % 2 == 0) c = Dim;
+            panel.barFill.color = c;
+            string extra = player is VoltCharacter v && v.Flashlight != null && v.Flashlight.IsLit ? " LUZ" : "";
+            panel.barText.text = resource.HudLabel + extra;
+        }
+
+        // Qué se puede hacer con lo que hay al lado del personaje que se controla.
+        void UpdatePrompt()
+        {
+            PlayerCharacter current = nil != null && nil.IsControlled ? nil : volt != null && volt.IsControlled ? volt : null;
+            IInteractable near = current != null ? current.NearbyInteractable : null;
+            prompt.enabled = near != null;
+            if (near != null)
+            {
+                prompt.text = near.GetPrompt(current);
+                prompt.color = near.CanBeUsedBy(current) ? Ink : Orange;
+            }
+        }
+
+        void UpdatePanel(CharacterPanel panel, PlayerCharacter player)
         {
             bool active = player != null && player.IsControlled;
             panel.label.color = active ? Highlight : Ink;
-            var health = player != null ? player.GetComponent<PlayerHealth>() : null;
-            int max = health != null ? Mathf.Min(health.maxLives, panel.hearts.Length) : 0;
+            var health = player != null ? player.Health : null;
+            int max = health != null ? Mathf.Min(health.MaxLives, panel.hearts.Length) : 0;
             for (int i = 0; i < panel.hearts.Length; i++)
             {
                 panel.hearts[i].enabled = i < max;
@@ -198,10 +227,10 @@ namespace EntreDosMons.UI
 
         void FindCharacters()
         {
-            foreach (PlayerController2D p in PlayerController2D.All)
+            foreach (PlayerCharacter p in PlayerCharacter.All)
             {
-                if (nil == null && p.characterName == "Nil") nil = p;
-                else if (volt == null && p.characterName == "Volt") volt = p;
+                if (p is NilCharacter) nil = p;
+                else if (p is VoltCharacter) volt = p;
             }
         }
 

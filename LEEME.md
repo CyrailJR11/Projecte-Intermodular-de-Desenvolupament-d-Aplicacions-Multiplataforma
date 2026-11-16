@@ -25,14 +25,18 @@ Para montar una escena nueva desde cero, usa el menú **Entre Dos Mons**:
    un suelo de prueba, la cámara pixel perfect (32 PPU, 640×360), Nil, Volt, el cambio de personaje y el gestor de diálogos.
    Úsalo una vez por escena (si lo repites, duplica los objetos).
 
-Controles: A/D o flechas · Espacio/W saltar · W/S trepar · Q cambiar Nil ↔ Volt · F invertir la gravedad (solo Volt, otra F para volver al suelo) · L linterna (Volt) · E interactuar · S + Espacio bajar de una plataforma de madera.
+Controles: A/D o flechas · Espacio/W saltar · W/S trepar · Q cambiar Nil ↔ Volt · F invertir la gravedad (solo Volt, otra F para volver al suelo) · L linterna (Volt) · E interactuar (válvulas, terminales) · R reiniciar el nivel · S + Espacio bajar de una plataforma de madera.
 
 ## Contenido
 - `Art/Tiles/`: 32 tiles de 32×32 (ext_* bosque, cova_* cuevas). Los sólidos chocan; los demás son decoración.
 - `Art/Characters/Nil` (4 fotogramas) y `Volt` (6), sacados de vuestros sprites a su tamaño real (32×32, pivot centro).
 - `Editor/EntreDosMonsTileImporter.cs`: importa todo como pixel art (PPU 32, Point, sin compresión).
 - `Editor/EntreDosMonsSetup.cs`: el menú de arriba.
-- `Scripts/Player/`: `PlayerController2D`, `SimpleSpriteAnimator`, `CharacterSwitcher`, `CameraFollow2D`, `Checkpoint`, `GameInput`.
+- `Scripts/Characters/`: `PlayerCharacter` (clase abstracta) con `NilCharacter` y `VoltCharacter`, `CharacterHealth`, `NilBreath`, `VoltBattery`, `VoltFlashlight`.
+- `Scripts/Mechanics/Signals/`: fuentes (`Lever`, `Terminal`, `PressurePlate`, `Crystal`) y receptores (`Door`, `Lift`, `DrainableWater`) conectados por la capa de cables.
+- `Scripts/Levels/Validation/`: solucionador que comprueba que cada nivel se puede terminar y que no sobra ningún objeto (menú **Entre Dos Mons > 5**).
+- `Resources/Prefabs/`: prefabs de personajes y objetos, creados por **Entre Dos Mons > 4** (se crean solos al abrir el proyecto si faltan).
+- `Scripts/Player/`: `SimpleSpriteAnimator`, `CharacterSwitcher`, `CameraFollow2D`, `Checkpoint`, `GameInput`.
 - `Scripts/Dialogue/` + `Resources/Dialogues/`: sistema de diálogos (ver su LEEME en `unity/dialogos`).
 
 Los scripts no se han podido abrir en Unity desde aquí (los de jugador sí se han compilado con un compilador de C#);
@@ -40,7 +44,7 @@ si sale algún error en la consola, pásalo tal cual.
 
 ## Mecánicas (todo se genera por código desde el mapa del nivel)
 
-Al darle a Play, el `LevelBuilder` añade a Nil y Volt los componentes que faltan y crea el HUD, así que no hay que tocar la escena.
+Al darle a Play, el `LevelBuilder` instancia los prefabs de Nil, Volt y de cada objeto del mapa y crea el HUD, así que no hay que tocar la escena.
 Si añadís tiles nuevos, usad otra vez **Entre Dos Mons > 3** para refrescar la lista de tiles.
 
 | Carácter | Qué es | Cómo funciona |

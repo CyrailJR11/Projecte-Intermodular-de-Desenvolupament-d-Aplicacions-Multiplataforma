@@ -7,11 +7,9 @@ namespace EntreDosMons.Mechanics
     // y las luces de cristales, setas, cargadores y farolas sean las que alumbran. Usa la Global Light 2D de la escena.
     public class LevelLighting : MonoBehaviour
     {
-        public float exteriorIntensity = 1f;
-        public float caveIntensity = 0.12f;
-        public float fadeSpeed = 1.5f;
-        [Tooltip("Por debajo de esta altura empieza la cueva (lo calcula el LevelBuilder).")]
-        public float caveTopY = float.NegativeInfinity;
+        [SerializeField] float exteriorIntensity = 1f;
+        [SerializeField] float caveIntensity = 0.12f;
+        [SerializeField] float fadeSpeed = 1.5f;
 
         Light2D global;
         CharacterSwitcher switcher;
@@ -33,8 +31,8 @@ namespace EntreDosMons.Mechanics
         void Update()
         {
             if (global == null) FindLights();
-            Transform who = switcher != null && switcher.characters != null && switcher.characters.Length > 0 ? switcher.Current.transform : null;
-            bool inCave = who != null && who.position.y < caveTopY;
+            PlayerCharacter who = switcher != null ? switcher.Current : null;
+            bool inCave = who != null && WorldMap.HasTwoWorlds && WorldMap.WorldAt(who.transform.position.y) == World.Cueva;
             float target = inCave ? caveIntensity : exteriorIntensity;
             global.intensity = Mathf.MoveTowards(global.intensity, target, fadeSpeed * Time.deltaTime);
         }

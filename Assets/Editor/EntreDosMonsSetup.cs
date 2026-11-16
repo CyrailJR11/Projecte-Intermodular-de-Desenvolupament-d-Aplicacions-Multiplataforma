@@ -11,15 +11,15 @@ using EntreDosMons.Levels;
 
 // Menú "Entre Dos Mons" para montar el proyecto en dos clics:
 //   1. Crear tiles y paletas: un Tile por cada PNG de Assets/Art/Tiles y dos Tile Palettes (Exterior y Coves).
-//   2. Preparar escena de prueba: Grid con 3 Tilemaps, suelo de prueba, cámara pixel perfect, Nil, Volt y diálogos.
+//   2. Preparar escena de prueba: Grid con 3 Tilemaps, suelo de prueba, cámara pixel perfect y diálogos.
 //   3. Usar niveles por código: añade el LevelBuilder, que construye los niveles de LevelLibrary al darle a Play.
+//   4. Crear prefabs (PrefabFactory.cs) y 5. Validar niveles (LevelValidationMenu.cs).
 public static class EntreDosMonsSetup
 {
     const string TilesFolder = "Assets/Art/Tiles";
     const string TileAssetsFolder = "Assets/Art/Tiles/TileAssets";
     const string PalettesFolder = "Assets/Art/Palettes";
-    const string CharactersFolder = "Assets/Art/Characters";
-    const int PPU = 32;
+        const int PPU = 32;
     const int RefWidth = 640, RefHeight = 360;   // 20 × 11 casillas; x3 en 1080p, x4 en 1440p
 
     // Tiles que chocan con los personajes. El resto (arbustos, flores, cuerdas, agua, fanal, tubos...) son decoración.
@@ -151,19 +151,12 @@ public static class EntreDosMonsSetup
         var follow = cam.GetComponent<CameraFollow2D>();
         if (follow == null) follow = cam.gameObject.AddComponent<CameraFollow2D>();
 
-        // Personajes. Fotogramas: Nil 0-1 andar, 2 en el aire · Volt 3 quieto, 0-2 andar, 4 en el aire.
-        LayerMask groundMask = 1 << groundLayer;
-        var nil = CreateCharacter("Nil", new Vector3(0f, 0f, 0f), playerLayer, groundMask, false,
-            Frames("Nil/nil", 0), Frames("Nil/nil", 0, 1), Frames("Nil/nil", 2));
-        var volt = CreateCharacter("Volt", new Vector3(24f, 0f, 0f), playerLayer, groundMask, true,
-            Frames("Volt/volt", 3), Frames("Volt/volt", 0, 1, 2), Frames("Volt/volt", 4));
-
+        // Los personajes ya no están en la escena: son PREFABS (Assets/Resources/Prefabs/Nil y Volt) y el
+        // LevelBuilder los coloca en la 'N' y la 'V' de cada mapa. Aquí solo va quien los cambia (Q).
         var game = new GameObject("Juego");
         Undo.RegisterCreatedObjectUndo(game, "Preparar escena");
-        var switcher = game.AddComponent<CharacterSwitcher>();
-        switcher.characters = new[] { nil, volt };
-        switcher.cameraFollow = follow;
-        follow.target = nil.transform;
+        game.AddComponent<CharacterSwitcher>().CameraFollow = follow;
+        PrefabFactory.CreateMissingPrefabs();
 
         if (Object.FindAnyObjectByType<DialogueManager>() == null)
         {
@@ -172,9 +165,10 @@ public static class EntreDosMonsSetup
             dialogos.AddComponent<DialogueManager>();
         }
 
-        Selection.activeGameObject = nil.gameObject;
+        Selection.activeGameObject = grid;
         UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(grid.scene);
-        Debug.Log("Entre Dos Mons: escena lista. Dale a Play: A/D andar, Espacio saltar, W/S trepar, Q cambiar a Volt, F invertir su gravedad (otra vez F para volver), L linterna, E interactuar.");
+        Debug.Log("Entre Dos Mons: escena lista. Ahora usa la opción 3 (niveles por código) y dale a Play: A/D andar, Espacio saltar, W/S trepar, " +
+                  "Q cambiar de personaje, F invertir la gravedad de Volt, L linterna, E interactuar, R reiniciar el nivel.");
     }
 
     [MenuItem("Entre Dos Mons/3. Usar niveles por código")]
@@ -211,19 +205,12 @@ public static class EntreDosMonsSetup
             builder = go.AddComponent<LevelBuilder>();
         }
         Undo.RecordObject(builder, "Usar niveles por código");
-        builder.ground = ground;
-        builder.decoration = decoration;
-        builder.background = background;
-        builder.tiles = tiles.ToArray();   // incluye los tiles nuevos: ext_punxes, cova_punxes y cova_comporta
-        builder.cameraFollow = Object.FindAnyObjectByType<CameraFollow2D>();
-        foreach (PlayerController2D p in Object.FindObjectsByType<PlayerController2D>(FindObjectsSortMode.None))
-        {
-            if (p.characterName == "Nil") builder.nil = p;
-            else if (p.characterName == "Volt") builder.volt = p;
-        }
+        // Incluye los tiles de los objetos nuevos: terminal, válvula, placa, montacargas, trampilla y señal de canal.
+        builder.Configure(ground, decoration, background, tiles.ToArray(), Object.FindAnyObjectByType<CameraFollow2D>());
+        PrefabFactory.CreateMissingPrefabs();
 
         // Vista previa en el editor (el suelo de prueba de la opción 2 se borra). Al darle a Play se vuelve a construir.
-        builder.Build(builder.startLevel);
+        builder.Build(0);
         EditorUtility.SetDirty(builder);
         Selection.activeGameObject = builder.gameObject;
         UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(builder.gameObject.scene);
@@ -236,61 +223,6 @@ public static class EntreDosMonsSetup
         go.transform.SetParent(parent, false);
         go.GetComponent<TilemapRenderer>().sortingOrder = sortingOrder;
         return go.GetComponent<Tilemap>();
-    }
-
-    static PlayerController2D CreateCharacter(string name, Vector3 position, int layer, LayerMask groundMask, bool canFlipGravity,
-        Sprite[] idle, Sprite[] walk, Sprite[] air)
-    {
-        var go = new GameObject(name);
-        Undo.RegisterCreatedObjectUndo(go, "Preparar escena");
-        go.tag = name;
-        go.layer = layer;
-        go.transform.position = position;
-
-        var sr = go.AddComponent<SpriteRenderer>();
-        sr.sprite = idle.Length > 0 ? idle[0] : null;
-        sr.sortingOrder = 10;
-
-        var rb = go.AddComponent<Rigidbody2D>();
-        rb.gravityScale = 3f;
-        rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
-
-        var box = go.AddComponent<BoxCollider2D>();
-        box.size = new Vector2(0.5f, 0.9f);
-        box.offset = new Vector2(0f, -0.05f);
-
-        var player = go.AddComponent<PlayerController2D>();
-        player.characterName = name;
-        player.groundLayers = groundMask;
-        player.canFlipGravity = canFlipGravity;
-        // Nil trepa cuerdas y nada; Volt solo escaleras y se hunde en el agua (gasta batería).
-        player.canClimbRopes = !canFlipGravity;
-        player.canSwim = !canFlipGravity;
-        // Vidas, respiración, batería y linterna (el LevelBuilder también las añade al darle a Play si faltan).
-        go.AddComponent<PlayerHealth>();
-        if (canFlipGravity)
-        {
-            go.AddComponent<VoltBattery>();
-            go.AddComponent<VoltFlashlight>();
-        }
-        else go.AddComponent<PlayerBreath>();
-
-        var anim = go.AddComponent<SimpleSpriteAnimator>();
-        anim.idleFrames = idle;
-        anim.walkFrames = walk;
-        anim.airFrames = air;
-        return player;
-    }
-
-    static Sprite[] Frames(string prefix, params int[] indices)
-    {
-        var list = new List<Sprite>();
-        foreach (int i in indices)
-        {
-            var s = AssetDatabase.LoadAssetAtPath<Sprite>($"{CharactersFolder}/{prefix}_{i}.png");
-            if (s != null) list.Add(s);
-        }
-        return list.ToArray();
     }
 
     static Tile LoadTile(string name) => AssetDatabase.LoadAssetAtPath<Tile>($"{TileAssetsFolder}/{name}.asset");

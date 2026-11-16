@@ -3,10 +3,11 @@ using UnityEngine;
 namespace EntreDosMons.Mechanics
 {
     // Pinchos ('^' en el mapa): quien los toque pierde una vida y vuelve al último punto de control.
+    // [POO · Interfaz] No pregunta "¿es Nil o Volt?": daña a cualquier cosa que sea IDamageable.
     [RequireComponent(typeof(Collider2D))]
     public class Hazard : MonoBehaviour
     {
-        public DamageType type = DamageType.Pinchos;
+        [SerializeField] DamageType type = DamageType.Pinchos;
 
         void Reset() => GetComponent<Collider2D>().isTrigger = true;
 
@@ -15,8 +16,8 @@ namespace EntreDosMons.Mechanics
 
         void Hit(Collider2D other)
         {
-            var health = other.GetComponentInParent<PlayerHealth>();
-            if (health != null) health.Damage(type);
+            var target = other.GetComponentInParent<IDamageable>();
+            target?.Damage(type);
         }
     }
 }

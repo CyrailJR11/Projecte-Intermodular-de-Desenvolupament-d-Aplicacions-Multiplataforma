@@ -3,47 +3,59 @@ using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.Tilemaps;
 using EntreDosMons.Dialogue;
+using EntreDosMons.Levels.Validation;
 using EntreDosMons.Mechanics;
 using EntreDosMons.UI;
 
 namespace EntreDosMons.Levels
 {
-    // Construye el nivel por código a partir de los mapas de texto de LevelLibrary:
-    // pone los tiles en los Tilemaps, coloca a Nil y Volt, crea puntos de control, salida, zonas de diálogo,
-    // y los objetos con comportamiento (pinchos, agua, cuerdas, escaleras, péndulos, cajas, palancas, compuertas,
-    // cargadores y luces), paredes invisibles en los bordes y limita la cámara al tamaño del nivel.
-    // Al darle a Play también añade a los personajes las vidas, la respiración, la batería y la linterna, y crea el HUD.
+    // Construye el nivel por código a partir de los mapas de texto de LevelLibrary (nunca se pinta a mano):
+    //   1) Terreno y decoración → tiles en los Tilemaps.
+    //   2) Recorrido → zonas de agua, cuerdas, escaleras, pinchos y plataformas de madera.
+    //   3) Objetos con función → se INSTANCIAN SUS PREFABS (Assets/Resources/Prefabs): Nil, Volt, cajas, válvulas,
+    //      terminales, placas, cristales, compuertas, montacargas, cargadores, hogueras y salidas.
+    //   4) La capa de cables conecta fuentes y receptores (SignalNetwork).
+    // También pone paredes invisibles en los bordes, limita la cámara y, al darle a Play, crea el HUD y los diálogos.
     public class LevelBuilder : MonoBehaviour
     {
         [Header("Tilemaps del Grid")]
-        public Tilemap ground;
-        public Tilemap decoration;
-        public Tilemap background;
+        [SerializeField] Tilemap ground;
+        [SerializeField] Tilemap decoration;
+        [SerializeField] Tilemap background;
         [Tooltip("Plataformas de madera de un solo sentido. Si está vacío se crea solo, al lado de Suelo.")]
-        public Tilemap oneWay;
+        [SerializeField] Tilemap oneWay;
 
         [Header("Tiles (los rellena el menú Entre Dos Mons > 3)")]
-        public TileBase[] tiles;
+        [SerializeField] TileBase[] tiles;
 
         [Header("Escena")]
-        public PlayerController2D nil;
-        public PlayerController2D volt;
-        public CameraFollow2D cameraFollow;
+        [SerializeField] CameraFollow2D cameraFollow;
 
         [Header("Nivel")]
         [Tooltip("Número del nivel con el que empieza la partida (0 = Prólogo).")]
-        public int startLevel;
-
-        [Header("Luces del nivel")]
-        public bool createLights = true;
+        [SerializeField] int startLevel;
+        [SerializeField] bool createLights = true;
 
         public int CurrentLevel { get; private set; }
         public LevelDefinition Current => LevelLibrary.Levels[CurrentLevel];
+        public IReadOnlyList<PlayerCharacter> Characters => characters;
+
+        // Para el menú del editor y los tests.
+        public void Configure(Tilemap groundMap, Tilemap decorationMap, Tilemap backgroundMap, TileBase[] tileList, CameraFollow2D follow)
+        {
+            ground = groundMap;
+            decoration = decorationMap;
+            background = backgroundMap;
+            tiles = tileList;
+            cameraFollow = follow;
+        }
 
         readonly Dictionary<string, TileBase> tilesByName = new Dictionary<string, TileBase>();
+        readonly List<PlayerCharacter> characters = new List<PlayerCharacter>();
+        readonly HashSet<PlayerCharacter> arrived = new HashSet<PlayerCharacter>();
         Transform generated;
-        Material spriteMaterial;
-        int caveTopRow = -1;
+        LevelModel model;
+        bool changingLevel;
 
         void Start()
         {
@@ -51,57 +63,57 @@ namespace EntreDosMons.Levels
             Build(startLevel);
         }
 
+        void Update()
+        {
+            if (GameInput.RestartPressed() && !DialogueManager.IsCinematicPlaying)
+            {
+                GameHUD.Say("Reiniciando el nivel...", 1f);
+                RestartLevel();
+            }
+        }
+
         public void NextLevel()
         {
             if (CurrentLevel + 1 < LevelLibrary.Levels.Length) Build(CurrentLevel + 1);
-            else Debug.Log("Entre Dos Mons: no hay más niveles.");
+            else GameHUD.Say("¡Fin de la demo! Nil y Volt lo han conseguido juntos.", 5f);
         }
 
-        // Al quedarse sin vidas: el mismo nivel desde el principio.
+        // Al quedarse sin vidas o al pulsar R: el mismo nivel desde el principio.
         public void RestartLevel() => Build(CurrentLevel);
+
+        // Lo llama cada salida. El nivel acaba cuando han llegado los dos personajes.
+        public void ReportArrived(PlayerCharacter who)
+        {
+            if (changingLevel || !arrived.Add(who)) return;
+            GameAudio.Play("carga");
+            foreach (PlayerCharacter p in characters)
+            {
+                if (p == null || arrived.Contains(p)) continue;
+                GameHUD.Say($"{who.DisplayName} ha llegado. Falta {p.DisplayName}.", 2.5f);
+                var switcher = FindAnyObjectByType<CharacterSwitcher>();
+                if (switcher != null && who.IsControlled) switcher.Select(p);   // seguimos con el que falta
+                return;
+            }
+            changingLevel = true;
+            NextLevel();
+        }
 
         // Clic derecho en el componente > "Construir nivel" para verlo sin darle a Play.
         [ContextMenu("Construir nivel")]
         void BuildInEditor() => Build(startLevel);
 
-        // ---------- Personajes, HUD y luz (solo en Play) ----------
+        // ---------- HUD, diálogos, luz y cambio de personaje (solo en Play) ----------
 
         void SetupGameplay()
         {
-            if (nil != null)
-            {
-                nil.canClimbRopes = true;
-                nil.canClimbLadders = true;
-                nil.canSwim = true;
-                Ensure<PlayerHealth>(nil);
-                Ensure<PlayerBreath>(nil);
-            }
-            if (volt != null)
-            {
-                volt.canFlipGravity = true;
-                volt.canClimbRopes = false;
-                volt.canClimbLadders = true;
-                volt.canSwim = false;
-                Ensure<PlayerHealth>(volt);
-                Ensure<VoltBattery>(volt);
-                Ensure<VoltFlashlight>(volt);
-            }
-            var hud = FindAnyObjectByType<GameHUD>();
-            if (hud == null) hud = new GameObject("HUD").AddComponent<GameHUD>();
-            hud.nil = nil;
-            hud.volt = volt;
-            Ensure<LevelLighting>(this);
+            if (FindAnyObjectByType<GameHUD>() == null) new GameObject("HUD").AddComponent<GameHUD>();
+            if (GetComponent<LevelLighting>() == null) gameObject.AddComponent<LevelLighting>();
+            if (FindAnyObjectByType<CharacterSwitcher>() == null) new GameObject("Cambio de personaje").AddComponent<CharacterSwitcher>();
 
             // Diálogos: gestor + panel creado por código (si no habéis montado un DialogueUI con TextMeshPro).
             if (FindAnyObjectByType<DialogueManager>() == null) new GameObject("Dialogos").AddComponent<DialogueManager>();
             if (FindAnyObjectByType<DialogueUI>() == null && FindAnyObjectByType<DialoguePanel>() == null)
                 new GameObject("Panel de dialogos").AddComponent<DialoguePanel>();
-        }
-
-        static T Ensure<T>(Component target) where T : Component
-        {
-            var c = target.GetComponent<T>();
-            return c != null ? c : target.gameObject.AddComponent<T>();
         }
 
         // ---------- Construcción ----------
@@ -110,64 +122,138 @@ namespace EntreDosMons.Levels
         {
             CurrentLevel = Mathf.Clamp(index, 0, LevelLibrary.Levels.Length - 1);
             LevelDefinition level = Current;
+            model = new LevelModel(level);
+            foreach (string error in model.Errors) Debug.LogError($"Entre Dos Mons ({level.Name}): {error}");
+
             IndexTiles();
             EnsureOneWayTilemap();
             Clear();
-            spriteMaterial = FindSpriteMaterial();
-            caveTopRow = FindCaveTopRow(level);
+            SignalNetwork.Reset(level.Channels);
+            WorldMap.Clear();
+            WorldMap.CaveTopY = model.CaveTop >= 0 ? level.Height - model.CaveTop : float.NegativeInfinity;
+            ChannelLamp.LampSprite = SpriteOf("senyal_canal");
+            characters.Clear();
+            arrived.Clear();
+            changingLevel = false;
 
-            int height = level.Height;
-            var levers = new List<Lever>();
-            var doors = new List<Door>();
+            PlaceTilesAndObjects(level);
+            CreateSignalObjects();
+            CreateWater(level);
+            CreateClimbables(level);
+            CreateBorders(level.Width, level.Height);
+            FitCamera(level.Width, level.Height);
+            if (Application.isPlaying) StartCharacters();
+            Debug.Log($"Entre Dos Mons: nivel {CurrentLevel} construido ({level.Name}, {level.Width}×{level.Height}).");
+        }
 
-            for (int row = 0; row < height; row++)
+        Vector3Int CellOf(int x, int row) => new Vector3Int(x, Current.Height - 1 - row, 0);   // la fila 0 del texto es la de arriba
+        Vector3 CenterOf(int x, int row) => ground.GetCellCenterWorld(CellOf(x, row));
+
+        void PlaceTilesAndObjects(LevelDefinition level)
+        {
+            for (int row = 0; row < level.Height; row++)
             {
                 string line = level.Map[row];
-                int y = height - 1 - row;   // la primera fila del texto es la de arriba
                 for (int x = 0; x < line.Length; x++)
                 {
                     char c = line[x];
-                    if (c == LevelLegend.Empty) continue;
-                    var cell = new Vector3Int(x, y, 0);
-                    Vector3 center = ground.GetCellCenterWorld(cell);
+                    if (c == LevelLegend.Empty || c == LevelLegend.LiftPath) continue;
+                    Vector3Int cell = CellOf(x, row);
+                    Vector3 center = CenterOf(x, row);
 
                     if (c == LevelLegend.OneWay)
                         oneWay.SetTile(cell, Find("ext_plataforma_fusta_" + EdgePiece(line, x)));
                     else if (LevelLegend.EdgeTiles.TryGetValue(c, out string prefix))
                         ground.SetTile(cell, Find(prefix + EdgePiece(line, x)));
-                    else if (c == LevelLegend.Spikes) CreateSpikes(level, row, x, cell, center);
-                    else if (c == LevelLegend.Box) CreateBox(center);
-                    else if (c == LevelLegend.Door)
-                    {
-                        // Una compuerta por columna de 'D': se crea en la casilla de abajo del todo.
-                        bool below = row + 1 < height && level.Map[row + 1][x] == LevelLegend.Door;
-                        if (!below) doors.Add(CreateDoor(level, row, x, center));
-                    }
-                    else if (c == LevelLegend.SwingAnchor) CreateSwingRope(center);
                     else if (LevelLegend.Tiles.TryGetValue(c, out var entry))
                     {
                         Layer(entry.layer).SetTile(cell, Find(entry.tile));
-                        if (c == LevelLegend.Lever) levers.Add(CreateLever(cell, center));
-                        else if (c == LevelLegend.Charger) CreateCharger(center);
                         CreateDecorLight(c, center);
                     }
-                    else if (c == LevelLegend.NilSpawn) Place(nil, center);
-                    else if (c == LevelLegend.VoltSpawn) Place(volt, center);
-                    else if (c == LevelLegend.Checkpoint) CreateZone("Checkpoint", center, new Vector2(1f, 4f)).AddComponent<Checkpoint>();
-                    else if (c == LevelLegend.Exit) CreateZone("Salida", center, new Vector2(1f, 4f)).AddComponent<LevelExit>().builder = this;
-                    else if (!TryCreateDialogue(level, c, center))
-                        Debug.LogWarning($"Entre Dos Mons: carácter '{c}' desconocido en el nivel {CurrentLevel}, fila {row}, columna {x}.");
+                    else PlaceObject(level, c, x, row, cell, center);
                 }
             }
+        }
 
-            CreateWater(level);
-            CreateClimbables(level);
-            LinkLevers(levers, doors);
-            CreateBorders(level.Width, height);
-            FitCamera(level.Width, height);
-            ConfigureLighting(height);
-            if (Application.isPlaying) ResetPlayers();
-            Debug.Log($"Entre Dos Mons: nivel {CurrentLevel} construido ({level.Name}, {level.Width}×{height}).");
+        // [Prefabs] Cada carácter con función instancia su prefab.
+        void PlaceObject(LevelDefinition level, char c, int x, int row, Vector3Int cell, Vector3 center)
+        {
+            switch (c)
+            {
+                case LevelLegend.NilSpawn: characters.Add(Spawn(PrefabIds.Nil, center).GetComponent<PlayerCharacter>()); break;
+                case LevelLegend.VoltSpawn: characters.Add(Spawn(PrefabIds.Volt, center).GetComponent<PlayerCharacter>()); break;
+                case LevelLegend.Box: Spawn(PrefabIds.Box, center); break;
+                case LevelLegend.Charger: Spawn(PrefabIds.Charger, center); break;
+                case LevelLegend.Checkpoint: Spawn(PrefabIds.Checkpoint, center); break;
+                case LevelLegend.Exit: Spawn(PrefabIds.Exit, center).GetComponent<LevelExit>().Init(this); break;
+                case LevelLegend.SwingAnchor:
+                    Spawn(PrefabIds.Swing, center + new Vector3(0f, 0.4f, 0f));
+                    decoration.SetTile(cell, Find("ext_corda_ancoratge"));
+                    break;
+                case LevelLegend.Spikes: CreateSpikes(level, x, row, cell, center); break;
+                case LevelLegend.Door:
+                case LevelLegend.Lift:
+                case LevelLegend.Lever:
+                case LevelLegend.Terminal:
+                case LevelLegend.Plate:
+                case LevelLegend.Crystal:
+                    break;   // los crea CreateSignalObjects() a partir del LevelModel
+                default:
+                    if (!TryCreateDialogue(level, c, center))
+                        Debug.LogWarning($"Entre Dos Mons: carácter '{c}' desconocido en el nivel {CurrentLevel}, fila {row}, columna {x}.");
+                    break;
+            }
+        }
+
+        GameObject Spawn(string id, Vector3 position)
+        {
+            GameObject prefab = Resources.Load<GameObject>(PrefabIds.Folder + "/" + id);
+            GameObject go;
+            if (prefab != null) go = Instantiate(prefab, position, Quaternion.identity, generated);
+            else
+            {
+                // Plan B: el prefab aún no existe (proyecto recién abierto). Se monta con la misma receta.
+                go = PrefabRecipes.Create(id, SpriteOf);
+                go.transform.SetParent(generated, false);
+                go.transform.position = position;
+            }
+            go.name = id;
+            return go;
+        }
+
+        // Fuentes y receptores, con su canal de la capa de cables.
+        void CreateSignalObjects()
+        {
+            foreach (LevelModel.Source s in model.Sources)
+            {
+                string id = s.Kind == LevelLegend.Lever ? PrefabIds.Lever
+                    : s.Kind == LevelLegend.Terminal ? PrefabIds.Terminal
+                    : s.Kind == LevelLegend.Plate ? PrefabIds.Plate : PrefabIds.Crystal;
+                Spawn(id, CenterOf(s.X, s.Row)).GetComponent<SignalSource>().Connect(s.Channel);
+            }
+
+            foreach (LevelModel.Receiver r in model.Receivers)
+            {
+                if (r.Kind == LevelLegend.Door)
+                {
+                    // Vertical: el objeto va en la casilla de abajo. Horizontal: en la de la izquierda.
+                    int anchor = r.Horizontal ? r.Cells[0] : r.Cells[r.Cells.Count - 1];
+                    GameObject go = Spawn(PrefabIds.Door, CenterOf(model.XOf(anchor), model.RowOf(anchor)));
+                    var door = go.GetComponent<Door>();
+                    door.Build(r.Cells.Count, r.Horizontal);
+                    door.Connect(r.Channel, r.Horizontal ? new Vector3(0f, 0.7f, 0f) : new Vector3(0f, r.Cells.Count - 0.2f, 0f));
+                }
+                else if (r.Kind == LevelLegend.Lift)
+                {
+                    Vector3 left = CenterOf(r.LiftLeft, r.LiftBottom);
+                    int width = r.LiftRight - r.LiftLeft + 1;
+                    GameObject go = Spawn(PrefabIds.Lift, left + new Vector3((width - 1) / 2f, 0f, 0f));
+                    var lift = go.GetComponent<Lift>();
+                    lift.Build(width, r.LiftBottom - r.LiftTop);
+                    lift.Connect(r.Channel, new Vector3(0f, 0.7f, 0f));
+                }
+                // El agua con desagüe la monta CreateWater().
+            }
         }
 
         // Elige la pieza izquierda, central o derecha según los vecinos iguales.
@@ -180,173 +266,90 @@ namespace EntreDosMons.Levels
             return left ? "dreta" : "esquerra";
         }
 
-        // La cueva empieza en la primera fila que es todo roca 'R' (el techo de la cueva).
-        static int FindCaveTopRow(LevelDefinition level)
+        static bool IsSolid(char c) => LevelLegend.IsSolidTerrain(c) || c == LevelLegend.Box || c == LevelLegend.Door;
+
+        // ---------- Recorrido ----------
+
+        void CreateSpikes(LevelDefinition level, int x, int row, Vector3Int cell, Vector3 center)
         {
-            for (int row = 0; row < level.Height; row++)
-            {
-                string line = level.Map[row];
-                if (line.Length > 0 && line.Trim('R').Length == 0) return row;
-            }
-            return -1;
-        }
-
-        bool IsCave(int row) => caveTopRow >= 0 && row >= caveTopRow;
-
-        static bool IsSolid(char c)
-        {
-            if (LevelLegend.EdgeTiles.ContainsKey(c) && c != LevelLegend.OneWay) return true;
-            if (c == LevelLegend.Box || c == LevelLegend.Door) return true;
-            return LevelLegend.Tiles.TryGetValue(c, out var e) && e.layer == LevelLayer.Suelo;
-        }
-
-        static char At(LevelDefinition level, int row, int x)
-        {
-            if (row < 0 || row >= level.Height || x < 0 || x >= level.Map[row].Length) return LevelLegend.Empty;
-            return level.Map[row][x];
-        }
-
-        // ---------- Objetos ----------
-
-        void CreateSpikes(LevelDefinition level, int row, int x, Vector3Int cell, Vector3 center)
-        {
-            decoration.SetTile(cell, Find(IsCave(row) ? LevelLegend.SpikesCave : LevelLegend.SpikesExterior));
+            bool cave = model.WorldOf(row) == World.Cueva;
+            decoration.SetTile(cell, Find(cave ? LevelLegend.SpikesCave : LevelLegend.SpikesExterior));
             // Si hay suelo encima y no debajo, cuelgan del techo (para Volt boca abajo).
-            bool hanging = IsSolid(At(level, row - 1, x)) && !IsSolid(At(level, row + 1, x));
+            bool hanging = IsSolid(level.At(x, row - 1)) && !IsSolid(level.At(x, row + 1));
             if (hanging) decoration.SetTransformMatrix(cell, Matrix4x4.Rotate(Quaternion.Euler(0f, 0f, 180f)));
-            Vector3 offset = new Vector3(0f, hanging ? 0.25f : -0.25f, 0f);
-            CreateZone("Pinchos", center + offset, new Vector2(0.8f, 0.45f)).AddComponent<Hazard>();
+            Spawn(PrefabIds.Spikes, center + new Vector3(0f, hanging ? 0.25f : -0.25f, 0f));
         }
 
-        void CreateBox(Vector3 center)
-        {
-            var go = new GameObject("Caja");
-            go.layer = ground.gameObject.layer;   // se puede pisar
-            go.transform.SetParent(generated, false);
-            go.transform.position = center;
-            var sr = go.AddComponent<SpriteRenderer>();
-            sr.sprite = SpriteOf(LevelLegend.BoxTile);
-            sr.sortingOrder = 1;
-            if (spriteMaterial != null) sr.sharedMaterial = spriteMaterial;
-            var body = go.AddComponent<Rigidbody2D>();
-            body.mass = 2f;
-            body.gravityScale = 3f;
-            body.freezeRotation = true;
-            body.interpolation = RigidbodyInterpolation2D.Interpolate;
-            var col = go.AddComponent<BoxCollider2D>();
-            col.size = new Vector2(0.96f, 0.98f);
-            col.sharedMaterial = new PhysicsMaterial2D("Caja") { friction = 0.6f, bounciness = 0f };
-            if (Application.isPlaying) go.AddComponent<PushableBox>();
-            else body.bodyType = RigidbodyType2D.Kinematic;   // vista previa en el editor: que no se caiga
-        }
-
-        Door CreateDoor(LevelDefinition level, int bottomRow, int x, Vector3 bottomCenter)
-        {
-            int cells = 0;
-            for (int r = bottomRow; r >= 0 && At(level, r, x) == LevelLegend.Door; r--) cells++;
-            var go = new GameObject("Compuerta");
-            go.layer = ground.gameObject.layer;
-            go.transform.SetParent(generated, false);
-            go.transform.position = bottomCenter;
-            var door = go.AddComponent<Door>();
-            door.Init(SpriteOf(LevelLegend.DoorTile), cells, spriteMaterial, -1);   // detrás del Suelo: al abrirse se esconde en el techo
-            return door;
-        }
-
-        Lever CreateLever(Vector3Int cell, Vector3 center)
-        {
-            GameObject zone = CreateZone("Palanca", center, new Vector2(1.6f, 1.6f));
-            var lever = zone.AddComponent<Lever>();
-            lever.tilemap = decoration;
-            lever.cell = cell;
-            return lever;
-        }
-
-        // Cada compuerta obedece a la palanca más cercana.
-        static void LinkLevers(List<Lever> levers, List<Door> doors)
-        {
-            if (levers.Count == 0) return;
-            foreach (Door door in doors)
-            {
-                Lever best = null;
-                float bestDistance = float.MaxValue;
-                foreach (Lever lever in levers)
-                {
-                    float d = Vector2.Distance(lever.transform.position, door.transform.position);
-                    if (d < bestDistance) { bestDistance = d; best = lever; }
-                }
-                best.doors.Add(door);
-            }
-        }
-
-        void CreateCharger(Vector3 center)
-        {
-            GameObject zone = CreateZone("Cargador", center, new Vector2(1.4f, 1.4f));
-            var charger = zone.AddComponent<BatteryCharger>();
-            charger.glow = CreateLight("Luz cargador", center, new Color32(0x62, 0xB5, 0x6B, 0xFF), 2.5f, 0.8f);
-        }
-
-        void CreateSwingRope(Vector3 center)
-        {
-            var go = new GameObject("Cuerda péndulo");
-            go.transform.SetParent(generated, false);
-            go.transform.position = center + new Vector3(0f, 0.4f, 0f);
-            go.AddComponent<SwingRope>();
-            decoration.SetTile(decoration.WorldToCell(center), Find("ext_corda_ancoratge"));
-        }
-
-        // Agua: un rectángulo por cada tramo horizontal de '~' / 'w'. La superficie empieza un poco por debajo del borde del tile.
+        // Agua: un rectángulo por cada tramo horizontal de '~' / 'w'. Si el agua tiene cable, todos sus tramos
+        // van a un DrainableWater que la vacía cuando se activa su canal.
         void CreateWater(LevelDefinition level)
         {
-            int height = level.Height;
-            for (int row = 0; row < height; row++)
+            var drainOf = new Dictionary<int, LevelModel.Receiver>();
+            foreach (LevelModel.Receiver r in model.Receivers)
+                if (LevelLegend.IsWater(r.Kind))
+                    foreach (int i in r.Cells) drainOf[i] = r;
+            var zonesOf = new Dictionary<LevelModel.Receiver, List<WaterZone>>();
+
+            for (int row = 0; row < level.Height; row++)
             {
                 string line = level.Map[row];
                 int x = 0;
                 while (x < line.Length)
                 {
-                    if (!IsWater(line[x])) { x++; continue; }
+                    if (!LevelLegend.IsWater(line[x])) { x++; continue; }
                     int start = x;
                     bool surface = false;
-                    while (x < line.Length && IsWater(line[x]))
+                    while (x < line.Length && LevelLegend.IsWater(line[x]))
                     {
                         surface |= line[x] == LevelLegend.WaterSurface;
                         x++;
                     }
-                    Vector3 corner = ground.CellToWorld(new Vector3Int(start, height - 1 - row, 0));
-                    float top = surface ? 0.7f : 1f;
+                    Vector3 corner = ground.CellToWorld(CellOf(start, row));
                     var go = new GameObject("Agua");
                     go.transform.SetParent(generated, false);
                     go.transform.position = corner;
-                    go.AddComponent<WaterZone>().area = new Rect(corner.x, corner.y, x - start, top);
+                    var zone = go.AddComponent<WaterZone>();
+                    zone.Area = new Rect(corner.x, corner.y, x - start, surface ? 0.7f : 1f);
+                    if (drainOf.TryGetValue(model.Index(start, row), out LevelModel.Receiver r))
+                    {
+                        if (!zonesOf.TryGetValue(r, out List<WaterZone> list)) zonesOf[r] = list = new List<WaterZone>();
+                        list.Add(zone);
+                    }
                 }
             }
-        }
 
-        static bool IsWater(char c) => c == LevelLegend.WaterSurface || c == LevelLegend.WaterFill;
+            foreach (var pair in zonesOf)
+            {
+                LevelModel.Receiver r = pair.Key;
+                var cells = new List<Vector3Int>();
+                foreach (int i in r.Cells) cells.Add(CellOf(model.XOf(i), model.RowOf(i)));
+                var go = new GameObject("Desague " + r.Channel);
+                go.transform.SetParent(generated, false);
+                go.transform.position = CenterOf(model.XOf(r.Cells[0]), model.RowOf(r.Cells[0]));
+                var drain = go.AddComponent<DrainableWater>();
+                drain.Build(pair.Value, decoration, cells);
+                drain.Connect(r.Channel, new Vector3(0f, 0.9f, 0f));
+            }
+        }
 
         // Cuerdas ('T' + '|') y escaleras ('e'): una zona por cada columna seguida. Sobresale media casilla por arriba
         // para poder terminar de subir a la plataforma.
         void CreateClimbables(LevelDefinition level)
         {
-            int height = level.Height;
             for (int x = 0; x < level.Width; x++)
             {
                 int row = 0;
-                while (row < height)
+                while (row < level.Height)
                 {
-                    ClimbKind? kind = ClimbKindOf(At(level, row, x));
+                    ClimbKind? kind = ClimbKindOf(level.At(x, row));
                     if (kind == null) { row++; continue; }
                     int top = row;
-                    while (row < height && ClimbKindOf(At(level, row, x)) == kind) row++;
-                    int cells = row - top;
-                    Vector3 corner = ground.CellToWorld(new Vector3Int(x, height - row, 0));   // esquina de abajo
+                    while (row < level.Height && ClimbKindOf(level.At(x, row)) == kind) row++;
+                    Vector3 corner = ground.CellToWorld(CellOf(x, row - 1));   // esquina de abajo
                     var go = new GameObject(kind == ClimbKind.Cuerda ? "Cuerda" : "Escalera");
                     go.transform.SetParent(generated, false);
                     go.transform.position = corner;
-                    var climb = go.AddComponent<Climbable>();
-                    climb.kind = kind.Value;
-                    climb.area = new Rect(corner.x + 0.2f, corner.y, 0.6f, cells + 0.5f);
+                    go.AddComponent<Climbable>().Init(kind.Value, new Rect(corner.x + 0.2f, corner.y, 0.6f, row - top + 0.5f));
                 }
             }
         }
@@ -360,38 +363,18 @@ namespace EntreDosMons.Levels
 
         // ---------- Luces ----------
 
-        void ConfigureLighting(int height)
-        {
-            var lighting = GetComponent<LevelLighting>();
-            if (lighting == null) return;
-            lighting.caveTopY = caveTopRow >= 0 ? ground.CellToWorld(new Vector3Int(0, height - caveTopRow, 0)).y : float.NegativeInfinity;
-        }
-
-        // Cristales, setas y farolas dan un poco de luz (en las cuevas es casi la única que hay, aparte de Volt).
+        // Setas y farolas dan un poco de luz (en las cuevas es casi la única que hay, aparte de Volt y los cristales).
         void CreateDecorLight(char c, Vector3 center)
         {
-            switch (c)
-            {
-                case 'k': CreateLight("Luz cristal", center, new Color32(0x4B, 0x89, 0xA6, 0xFF), 2.2f, 0.9f); break;
-                case 'b': CreateLight("Luz setas", center, new Color32(0x62, 0xB5, 0x6B, 0xFF), 1.6f, 0.6f); break;
-                case 'L': CreateLight("Luz farola", center + new Vector3(0f, 0.3f, 0f), new Color32(0xFF, 0xD3, 0x4E, 0xFF), 3f, 0.8f); break;
-            }
+            if (!createLights) return;
+            if (c == 'b') AddLight("Luz setas", center, new Color32(0x62, 0xB5, 0x6B, 0xFF), 1.6f, 0.6f);
+            else if (c == 'L') AddLight("Luz farola", center + new Vector3(0f, 0.3f, 0f), new Color32(0xFF, 0xD3, 0x4E, 0xFF), 3f, 0.8f);
         }
 
-        Light2D CreateLight(string name, Vector3 position, Color color, float radius, float intensity)
+        void AddLight(string name, Vector3 position, Color color, float radius, float intensity)
         {
-            if (!createLights) return null;
-            var go = new GameObject(name);
-            go.transform.SetParent(generated, false);
-            go.transform.position = position;
-            var light = go.AddComponent<Light2D>();
-            light.lightType = Light2D.LightType.Point;
-            light.color = color;
-            light.intensity = intensity;
-            light.pointLightInnerRadius = 0f;
-            light.pointLightOuterRadius = radius;
-            light.falloffIntensity = 0.7f;
-            return light;
+            Light2D light = PrefabRecipes.AddLight(generated, name, Vector3.zero, color, radius, intensity);
+            light.transform.position = position;
         }
 
         // ---------- Diálogos y personajes ----------
@@ -411,34 +394,20 @@ namespace EntreDosMons.Levels
             return false;
         }
 
-        void Place(PlayerController2D player, Vector3 position)
+        // Personajes recién creados: límites de caída, punto de control y cámara.
+        void StartCharacters()
         {
-            if (player == null) return;
-            if (Application.isPlaying) player.ResetMotion();
-            player.transform.position = position;
-            var body = player.GetComponent<Rigidbody2D>();
-            if (body != null)
+            foreach (PlayerCharacter p in characters)
             {
-                body.position = position;
-                body.linearVelocity = Vector2.zero;
+                p.FallLimitBottom = -5f;
+                p.FallLimitTop = Current.Height + 5f;
+                p.PlaceAt(p.transform.position);
             }
-            player.fallLimitBottom = -5f;
-            player.fallLimitTop = Current.Height + 5f;
-            if (Application.isPlaying) player.SetCheckpoint(position);
-        }
-
-        // Nivel nuevo o reiniciado: vidas, respiración y batería al máximo.
-        void ResetPlayers()
-        {
-            foreach (PlayerController2D p in new[] { nil, volt })
+            var switcher = FindAnyObjectByType<CharacterSwitcher>();
+            if (switcher != null)
             {
-                if (p == null) continue;
-                var health = p.GetComponent<PlayerHealth>();
-                if (health != null) health.ResetLives();
-                var breath = p.GetComponent<PlayerBreath>();
-                if (breath != null) breath.ResetBreath();
-                var battery = p.GetComponent<VoltBattery>();
-                if (battery != null) battery.ResetCharge();
+                if (switcher.CameraFollow == null) switcher.CameraFollow = cameraFollow;
+                switcher.SetCharacters(characters);
             }
         }
 
@@ -468,6 +437,7 @@ namespace EntreDosMons.Levels
 
         void FitCamera(int width, int height)
         {
+            if (cameraFollow == null) cameraFollow = FindAnyObjectByType<CameraFollow2D>();
             if (cameraFollow == null) return;
             var cam = cameraFollow.GetComponent<Camera>();
             float halfH = cam != null ? cam.orthographicSize : 5.625f;
@@ -503,13 +473,6 @@ namespace EntreDosMons.Levels
             oneWay = go.GetComponent<Tilemap>();
         }
 
-        Material FindSpriteMaterial()
-        {
-            // El mismo material que los personajes (Sprite-Lit-Default de URP 2D), para que les afecten las luces.
-            var source = nil != null ? nil.GetComponentInChildren<SpriteRenderer>() : null;
-            return source != null ? source.sharedMaterial : null;
-        }
-
         Tilemap Layer(LevelLayer layer)
         {
             switch (layer)
@@ -527,11 +490,24 @@ namespace EntreDosMons.Levels
             return null;
         }
 
-        Sprite SpriteOf(string tileName) => Find(tileName) is Tile t ? t.sprite : null;
+        // Sprites para las recetas de prefabs: de los tiles y, en el editor, de Assets/Art (los de los personajes).
+        Sprite SpriteOf(string spriteName)
+        {
+            if (tilesByName.TryGetValue(spriteName, out TileBase t) && t is Tile tile) return tile.sprite;
+#if UNITY_EDITOR
+            foreach (string folder in new[] { "Assets/Art/Tiles/", "Assets/Art/Characters/" })
+            {
+                var s = UnityEditor.AssetDatabase.LoadAssetAtPath<Sprite>(folder + spriteName + ".png");
+                if (s != null) return s;
+            }
+#endif
+            return null;
+        }
 
         void IndexTiles()
         {
             tilesByName.Clear();
+            if (tiles == null) return;
             foreach (TileBase tile in tiles)
                 if (tile != null) tilesByName[tile.name] = tile;
         }
@@ -547,6 +523,7 @@ namespace EntreDosMons.Levels
             if (old != null)
             {
                 old.name = "Generado (borrando)";
+                old.gameObject.SetActive(false);   // se quitan ya de las listas (personajes, interactuables...)
                 if (Application.isPlaying) Destroy(old.gameObject);
                 else DestroyImmediate(old.gameObject);
             }

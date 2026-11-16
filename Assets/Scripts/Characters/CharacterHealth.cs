@@ -5,27 +5,28 @@ using EntreDosMons.Levels;
 
 namespace EntreDosMons
 {
-    public enum DamageType { Pinchos, Ahogado, Cortocircuito, Caida }
-
     // Vidas de Nil y de Volt. Cada golpe (pinchos, ahogarse, cortocircuito en el agua o caerse) quita una vida
     // y devuelve al personaje al último punto de control, con un momento de invulnerabilidad (parpadea).
     // Sin vidas, se reinicia el nivel entero y los dos personajes recuperan todas sus vidas.
-    [RequireComponent(typeof(PlayerController2D))]
-    public class PlayerHealth : MonoBehaviour
+    // [POO · Interfaz] Implementa IDamageable: los pinchos no saben qué es un personaje, solo que se le puede dañar.
+    // [POO · Encapsulamiento] Lives tiene "private set": solo se cambia con Damage() o ResetLives().
+    [RequireComponent(typeof(PlayerCharacter))]
+    public class CharacterHealth : MonoBehaviour, IDamageable
     {
-        public int maxLives = 3;
+        [SerializeField] int maxLives = 3;
         [Tooltip("Segundos sin recibir daño después de reaparecer.")]
-        public float invulnerableTime = 1.5f;
+        [SerializeField] float invulnerableTime = 1.5f;
         [Tooltip("Pausa antes de reiniciar el nivel al quedarse sin vidas (en tiempo real).")]
-        public float gameOverDelay = 2f;
+        [SerializeField] float gameOverDelay = 2f;
 
+        public int MaxLives => maxLives;
         public int Lives { get; private set; }
         public bool IsInvulnerable => invulnerableTimer > 0f;
-        public PlayerController2D Player { get; private set; }
+        public PlayerCharacter Character { get; private set; }
 
-        public event Action<PlayerHealth> Changed;
-        public static event Action<PlayerHealth, DamageType> LifeLost;
-        public static event Action<PlayerHealth> OutOfLives;
+        public event Action<CharacterHealth> Changed;
+        public static event Action<CharacterHealth, DamageType> LifeLost;
+        public static event Action<CharacterHealth> OutOfLives;
 
         static bool restarting;
         float invulnerableTimer;
@@ -33,7 +34,7 @@ namespace EntreDosMons
 
         void Awake()
         {
-            Player = GetComponent<PlayerController2D>();
+            Character = GetComponent<PlayerCharacter>();
             sr = GetComponentInChildren<SpriteRenderer>();
             Lives = maxLives;
         }
@@ -51,7 +52,7 @@ namespace EntreDosMons
             if (IsInvulnerable)
             {
                 // Caerse del mapa durante la invulnerabilidad no quita vida, pero sí hay que volver.
-                if (type == DamageType.Caida) Player.Respawn();
+                if (type == DamageType.Caida) Character.Respawn();
                 return;
             }
 
@@ -65,7 +66,7 @@ namespace EntreDosMons
                 StartCoroutine(RestartLevel());
                 return;
             }
-            Player.Respawn();
+            Character.Respawn();
             invulnerableTimer = invulnerableTime;
         }
 
@@ -91,9 +92,8 @@ namespace EntreDosMons
             if (builder != null) builder.RestartLevel();
             else
             {
-                // Escena sin LevelBuilder: se vuelve al checkpoint con las vidas llenas.
-                foreach (PlayerHealth h in FindObjectsByType<PlayerHealth>(FindObjectsSortMode.None)) h.ResetLives();
-                Player.Respawn();
+                foreach (CharacterHealth h in FindObjectsByType<CharacterHealth>(FindObjectsSortMode.None)) h.ResetLives();
+                Character.Respawn();
             }
         }
     }

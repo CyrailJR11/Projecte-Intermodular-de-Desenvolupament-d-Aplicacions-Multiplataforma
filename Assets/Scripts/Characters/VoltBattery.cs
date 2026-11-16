@@ -3,50 +3,52 @@ using EntreDosMons.Dialogue;
 
 namespace EntreDosMons
 {
-    // Batería de Volt (0-100 %). La gasta la linterna, cada cambio de gravedad y, mucho, el agua ("esta unidad no flota").
+    // Batería de Volt (0-100 %). La gastan la linterna, cada cambio de gravedad y, mucho, el agua ("esta unidad no flota").
     // Se recarga en los cargadores ('c' en el mapa).
     // Sin batería: la linterna se apaga, no puede invertir la gravedad (si estaba en el techo, cae),
     // anda más lento y, si está en el agua, sufre un cortocircuito y pierde una vida.
-    [RequireComponent(typeof(PlayerController2D))]
-    public class VoltBattery : MonoBehaviour
+    // [POO · Herencia] Es un CharacterResource (igual que la respiración de Nil): el HUD la pinta sin saber qué es.
+    // [POO · Encapsulamiento] Charge solo cambia con TryConsume / AddCharge / SetCharge.
+    public class VoltBattery : CharacterResource
     {
-        public float maxCharge = 100f;
+        [SerializeField] float maxCharge = 100f;
         [Tooltip("Carga al empezar el nivel.")]
-        public float startCharge = 100f;
+        [SerializeField] float startCharge = 100f;
         [Tooltip("% por segundo con la linterna encendida.")]
-        public float flashlightDrain = 1f;
+        [SerializeField] float flashlightDrain = 1f;
         [Tooltip("% por segundo dentro del agua.")]
-        public float waterDrain = 12f;
+        [SerializeField] float waterDrain = 12f;
         [Tooltip("Por debajo de este % Volt avisa (bark_bateria_baja).")]
-        public float lowThreshold = 20f;
+        [SerializeField] float lowThreshold = 20f;
         [Tooltip("Carga mínima con la que reaparece después de perder una vida.")]
-        public float respawnMinimum = 35f;
-        [Range(0.1f, 1f)] public float reserveSpeedMultiplier = 0.6f;
+        [SerializeField] float respawnMinimum = 35f;
+        [Range(0.1f, 1f)] [SerializeField] float reserveSpeedMultiplier = 0.6f;
 
         public float Charge { get; private set; }
-        public float Normalized => maxCharge > 0f ? Charge / maxCharge : 0f;
         public bool IsEmpty => Charge <= 0f;
         public bool IsLow => Charge < lowThreshold;
         public bool IsCharging => chargingTimer > 0f;
 
-        PlayerController2D player;
-        PlayerHealth health;
+        public override float Normalized => maxCharge > 0f ? Charge / maxCharge : 0f;
+        public override string HudLabel => (IsCharging ? "+" : "") + Mathf.CeilToInt(Charge) + "%";
+        public override Color HudColor => IsLow ? (Color)new Color32(0xEE, 0x6C, 0x2F, 0xFF) : (Color)new Color32(0xF5, 0xD0, 0x4C, 0xFF);
+
         VoltFlashlight flashlight;
         bool lowWarned;
         float chargingTimer;
 
-        void Awake()
+        protected override void Awake()
         {
-            player = GetComponent<PlayerController2D>();
+            base.Awake();
+            flashlight = GetComponent<VoltFlashlight>();
             Charge = Mathf.Clamp(startCharge, 0f, maxCharge);
         }
 
-        void OnEnable() { if (player != null) player.Respawned += OnRespawn; }
-        void OnDisable() { if (player != null) player.Respawned -= OnRespawn; }
+        void OnEnable() { if (Character != null) Character.Respawned += OnRespawned; }
+        void OnDisable() { if (Character != null) Character.Respawned -= OnRespawned; }
+        void OnRespawned(PlayerCharacter _) => Charge = Mathf.Max(Charge, respawnMinimum);
 
-        void OnRespawn(PlayerController2D _) => Charge = Mathf.Max(Charge, respawnMinimum);
-
-        public void ResetCharge()
+        public override void Refill()
         {
             Charge = Mathf.Clamp(startCharge, 0f, maxCharge);
             lowWarned = false;
@@ -75,12 +77,10 @@ namespace EntreDosMons
         {
             chargingTimer -= Time.deltaTime;
             if (DialogueManager.IsCinematicPlaying) return;
-            if (flashlight == null) flashlight = GetComponent<VoltFlashlight>();
-            if (health == null) health = GetComponent<PlayerHealth>();
 
             float drain = 0f;
             if (flashlight != null && flashlight.IsLit) drain += flashlightDrain;
-            if (player.IsInWater) drain += waterDrain;
+            if (Character.IsInWater) drain += waterDrain;
             if (!IsCharging) Charge = Mathf.Max(0f, Charge - drain * Time.deltaTime);
 
             if (!lowWarned && IsLow)
@@ -92,11 +92,11 @@ namespace EntreDosMons
 
             if (IsEmpty)
             {
-                player.SpeedMultiplier = reserveSpeedMultiplier;
-                if (player.IsGravityFlipped) player.ForceNormalGravity();
-                if (player.IsInWater && health != null) health.Damage(DamageType.Cortocircuito);
+                Character.SpeedMultiplier = reserveSpeedMultiplier;
+                if (Character.IsGravityFlipped) Character.ForceNormalGravity();
+                if (Character.IsInWater) Character.Health.Damage(DamageType.Cortocircuito);
             }
-            else player.SpeedMultiplier = 1f;
+            else Character.SpeedMultiplier = 1f;
         }
     }
 }

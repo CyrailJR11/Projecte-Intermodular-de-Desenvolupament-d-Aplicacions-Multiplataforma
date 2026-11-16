@@ -9,18 +9,19 @@ namespace EntreDosMons.Mechanics
     public class SwingRope : MonoBehaviour
     {
         [Tooltip("Largo de la cuerda en casillas.")]
-        public float length = 4f;
-        public float minLength = 1.5f;
+        [SerializeField] float length = 4f;
+        [SerializeField] float minLength = 1.5f;
         [Tooltip("Distancia a la cuerda para agarrarse.")]
-        public float grabRadius = 0.6f;
+        [SerializeField] float grabRadius = 0.6f;
         [Tooltip("Fuerza con la que A/D balancean a Nil.")]
-        public float pushForce = 14f;
-        public float climbSpeed = 2f;
+        [SerializeField] float pushForce = 14f;
+        [SerializeField] float climbSpeed = 2f;
         [Tooltip("Impulso extra hacia arriba al soltarse (multiplica el salto de Nil).")]
-        public float releaseJump = 0.7f;
-        public Color ropeColor = new Color32(0xC8, 0x9A, 0x5A, 0xFF);
+        [SerializeField] float releaseJump = 0.7f;
+        [SerializeField] Color ropeColor = new Color32(0xC8, 0x9A, 0x5A, 0xFF);
 
-        public PlayerController2D Holder { get; private set; }
+        public float PushForce => pushForce;
+        public PlayerCharacter Holder { get; private set; }
 
         LineRenderer line;
         DistanceJoint2D joint;
@@ -56,9 +57,9 @@ namespace EntreDosMons.Mechanics
                 line.SetPosition(0, Anchor);
                 line.SetPosition(1, end);
                 if (cooldown > 0f) return;
-                foreach (PlayerController2D p in PlayerController2D.All)
+                foreach (PlayerCharacter p in PlayerCharacter.All)
                 {
-                    if (!p.canClimbRopes || p.IsGrounded || p.IsClimbing || p.IsSwinging || p.IsGravityFlipped) continue;
+                    if (!p.Has(CharacterAbility.TreparCuerdas) || p.IsGrounded || p.IsClimbing || p.IsSwinging || p.IsGravityFlipped) continue;
                     if (DistanceToSegment(p.Center, Anchor, end) < grabRadius) { Grab(p); break; }
                 }
                 return;
@@ -68,12 +69,12 @@ namespace EntreDosMons.Mechanics
             line.SetPosition(1, Holder.Center);
             if (Holder.IsGrounded) { Release(false); return; }
             if (!Holder.CanAct || DialogueManager.IsCinematicPlaying) return;
-            if (GameInput.JumpButtonPressed()) { Release(true); return; }
-            float v = GameInput.Vertical();
+            if (Holder.JumpButtonThisFrame) { Release(true); return; }
+            float v = Holder.VerticalInput;
             if (v != 0f) joint.distance = Mathf.Clamp(joint.distance - v * climbSpeed * Time.deltaTime, minLength, length);
         }
 
-        void Grab(PlayerController2D p)
+        void Grab(PlayerCharacter p)
         {
             Holder = p;
             joint = p.gameObject.AddComponent<DistanceJoint2D>();
@@ -92,7 +93,7 @@ namespace EntreDosMons.Mechanics
             if (joint != null) Destroy(joint);
             Rigidbody2D rb = Holder.Body;
             if (jump && rb != null)
-                rb.linearVelocity = new Vector2(rb.linearVelocity.x * 1.2f, Mathf.Max(rb.linearVelocity.y, 0f) + Holder.jumpSpeed * releaseJump);
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x * 1.2f, Mathf.Max(rb.linearVelocity.y, 0f) + Holder.JumpSpeed * releaseJump);
             Holder.DetachSwing();
             Holder = null;
             joint = null;
