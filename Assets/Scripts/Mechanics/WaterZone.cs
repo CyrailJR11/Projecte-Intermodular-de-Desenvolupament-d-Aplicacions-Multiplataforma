@@ -10,7 +10,9 @@ namespace EntreDosMons.Mechanics
         static readonly List<WaterZone> zones = new List<WaterZone>();
 
         [Tooltip("Rectángulo en coordenadas del mundo.")]
-        public Rect area;
+        [SerializeField] Rect area;
+
+        public Rect Area { get => area; set => area = value; }
 
         void OnEnable() => zones.Add(this);
         void OnDisable() => zones.Remove(this);

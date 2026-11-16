@@ -159,6 +159,20 @@ git clone -b upload/entre-dos-mons https://github.com/CyrailJR11/Projecte-Interm
    - **3. Usar niveles por código**: monta el nivel a partir de `LevelLibrary`.
 4. Pulsa ▶️ **Play**.
 
+### 🖥️ Pantalla (2560×1440 y otras)
+
+El juego se dibuja a **640×360** y se amplía con la Pixel Perfect Camera (`Core/ScreenSetup.cs`):
+
+| Pantalla | Ampliación | Resultado |
+|---|---|---|
+| 2560×1440 | ×4 exacto | Nítido y sin bordes |
+| 1920×1080 | ×3 exacto | Nítido y sin bordes |
+| 3840×2160 | ×6 exacto | Nítido y sin bordes |
+| Otras | múltiplo entero + estirado mínimo | Sin bandas negras |
+
+- En la versión compilada arranca a pantalla completa con la resolución del monitor.
+- En el Editor, en la pestaña **Game**, elige **2560x1440** en el desplegable de resolución (o añádela con **+**) y deja la escala en **1x**. Desmarca *Low Resolution Aspect Ratios*.
+
 ---
 
 ## 📁 Estructura
@@ -171,13 +185,20 @@ Assets/
 │   └── Tiles/        32 tiles 32×32 (ext_* y cova_*)
 ├── Editor/           Menú "Entre Dos Mons" e importador de pixel art
 ├── Resources/
-│   └── Dialogues/    dialogos_es.json (guion de Nil y Volt)
-├── Scenes/           SampleScene
-└── Scripts/
+│   ├── Dialogues/    dialogos_es.json (guion de Nil y Volt)
+│   └── Prefabs/      Nil, Volt, Caja, Valvula, Terminal, PlacaPresion… (los crea el menú 4)
+├── Scenes/           SampleScene (sin personajes fijos: el LevelBuilder los instancia)
+├── Tests/            EditMode (flujo de niveles) y PlayMode (físicas de cajas, placas, montacargas)
+└── Scripts/          ensamblado EntreDosMons.asmdef
+    ├── Core/         interfaces (IInteractable, ISignalReceiver, IPushable…), WorldMap, entrada
+    ├── Characters/   PlayerCharacter (abstracta) → NilCharacter / VoltCharacter, vidas, aire, batería
+    ├── Mechanics/    Signals/ (válvula, terminal, placa, cristal → compuerta, montacargas, desagüe), cajas…
+    ├── Levels/       LevelLibrary, LevelBuilder, Prefabs/ y Validation/ (solucionador automático)
     ├── Dialogue/     DialogueManager, DialogueUI, DialogueTrigger…
-    ├── Levels/       LevelLibrary, LevelLegend, LevelBuilder, LevelExit
-    └── Player/       PlayerController2D, CharacterSwitcher, CameraFollow2D…
+    └── Player/       CharacterSwitcher, CameraFollow2D, GameInput…
 ```
+
+Vistas previas de los niveles con su solución: [`Docs/niveles/`](Docs/niveles).
 
 ---
 

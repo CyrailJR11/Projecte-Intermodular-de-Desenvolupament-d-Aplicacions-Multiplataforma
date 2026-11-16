@@ -6,30 +6,34 @@ namespace EntreDosMons.Mechanics
     public enum ClimbKind { Cuerda, Escalera }
 
     // Cuerda vertical ('T' + '|') o escalera de madera ('e') por la que se puede trepar con W/S.
-    // Nil trepa cuerdas y escaleras; Volt solo escaleras (lo decide PlayerController2D).
+    // Quién puede trepar lo decide cada personaje (PlayerCharacter.CanClimb): Nil cuerdas y escaleras, Volt solo escaleras.
     public class Climbable : MonoBehaviour
     {
         static readonly List<Climbable> all = new List<Climbable>();
 
-        public ClimbKind kind;
+        [SerializeField] ClimbKind kind;
         [Tooltip("Rectángulo en coordenadas del mundo.")]
-        public Rect area;
+        [SerializeField] Rect area;
 
+        public ClimbKind Kind => kind;
+        public Rect Area => area;
         public float CenterX => area.center.x;
+
+        public void Init(ClimbKind climbKind, Rect worldArea)
+        {
+            kind = climbKind;
+            area = worldArea;
+        }
 
         void OnEnable() => all.Add(this);
         void OnDisable() => all.Remove(this);
 
         public bool Contains(Vector2 point) => area.Contains(point);
 
-        public static Climbable Find(Vector2 point, bool ropes, bool ladders)
+        public static Climbable Find(Vector2 point, PlayerCharacter who)
         {
             foreach (Climbable c in all)
-            {
-                if (c.kind == ClimbKind.Cuerda && !ropes) continue;
-                if (c.kind == ClimbKind.Escalera && !ladders) continue;
-                if (c.Contains(point)) return c;
-            }
+                if (c.Contains(point) && who.CanClimb(c.kind)) return c;
             return null;
         }
 

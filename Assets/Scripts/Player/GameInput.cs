@@ -7,7 +7,8 @@ namespace EntreDosMons
 {
     // Teclas del juego. Funciona con el Input System nuevo y con el antiguo (igual que DialogueInput).
     //   Mover: A/D o flechas · Saltar: Espacio, W o flecha arriba · Cambiar personaje: Q · Invertir gravedad (Volt): F
-    //   Trepar cuerdas y escaleras: W/S o flechas · Linterna (Volt): L · Interactuar (palancas, diálogos): E
+    //   Trepar cuerdas y escaleras: W/S o flechas · Linterna (Volt): L · Interactuar (válvulas, terminales, diálogos): E
+    //   Reiniciar el nivel: R
     //   Mando: stick izquierdo, A/Cruz salta, Y/Triángulo cambia, RB/R1 invierte la gravedad, LB/L1 linterna, X/Cuadrado interactúa.
     public static class GameInput
     {
@@ -115,6 +116,18 @@ namespace EntreDosMons
             return (kb != null && kb.spaceKey.wasPressedThisFrame) || (gp != null && gp.buttonSouth.wasPressedThisFrame);
 #else
             return Input.GetKeyDown(KeyCode.Space);
+#endif
+        }
+
+        // Reiniciar el nivel (R / Select): por si una caja se queda atascada donde no debe.
+        public static bool RestartPressed()
+        {
+#if ENABLE_INPUT_SYSTEM
+            var kb = Keyboard.current;
+            var gp = Gamepad.current;
+            return (kb != null && kb.rKey.wasPressedThisFrame) || (gp != null && gp.selectButton.wasPressedThisFrame);
+#else
+            return Input.GetKeyDown(KeyCode.R);
 #endif
         }
 
