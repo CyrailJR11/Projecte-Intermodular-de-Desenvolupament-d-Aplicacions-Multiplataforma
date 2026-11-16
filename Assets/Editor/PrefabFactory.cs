@@ -35,9 +35,15 @@ public static class PrefabFactory
             string path = $"{Folder}/{id}.prefab";
             if (!overwrite && File.Exists(path)) continue;
             GameObject go = PrefabRecipes.Create(id, LoadSprite);
-            PrefabUtility.SaveAsPrefabAsset(go, path);
-            Object.DestroyImmediate(go);
-            created++;
+            try
+            {
+                PrefabUtility.SaveAsPrefabAsset(go, path);
+                created++;
+            }
+            finally
+            {
+                Object.DestroyImmediate(go);   // nunca dejar el objeto temporal suelto en la escena
+            }
         }
         if (created == 0) return;
         AssetDatabase.SaveAssets();

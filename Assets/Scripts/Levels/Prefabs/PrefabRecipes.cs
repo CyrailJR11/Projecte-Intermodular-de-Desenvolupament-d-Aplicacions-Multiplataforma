@@ -28,14 +28,12 @@ namespace EntreDosMons.Levels
                 }
                 case PrefabIds.Plate:
                 {
-                    var plate = WithSprite<PressurePlate>(id, sprite("placa_pressio"), 1);
-                    Trigger(plate.gameObject, new Vector2(0.9f, 0.5f), new Vector2(0f, -0.25f));
+                    var plate = WithSprite<PressurePlate>(id, sprite("placa_pressio"), 1, new Vector2(0.9f, 0.5f), new Vector2(0f, -0.25f));
                     return plate.gameObject;
                 }
                 case PrefabIds.Crystal:
                 {
-                    var c = WithSprite<Crystal>(id, sprite("cova_cristall_blau"), 2);
-                    Trigger(c.gameObject, new Vector2(0.8f, 0.8f), Vector2.zero);
+                    var c = WithSprite<Crystal>(id, sprite("cova_cristall_blau"), 2, new Vector2(0.8f, 0.8f), Vector2.zero);
                     AddLight(c.transform, "Brillo", Vector3.zero, new Color32(0x4B, 0x89, 0xA6, 0xFF), 2.5f, 0.3f);
                     return c.gameObject;
                 }
@@ -57,8 +55,7 @@ namespace EntreDosMons.Levels
                 }
                 case PrefabIds.Charger:
                 {
-                    var ch = WithSprite<BatteryCharger>(id, sprite("cova_carregador_bateria"), 1);
-                    Trigger(ch.gameObject, new Vector2(1.4f, 1.4f), Vector2.zero);
+                    var ch = WithSprite<BatteryCharger>(id, sprite("cova_carregador_bateria"), 1, new Vector2(1.4f, 1.4f), Vector2.zero);
                     AddLight(ch.transform, "Luz", Vector3.zero, new Color32(0x62, 0xB5, 0x6B, 0xFF), 2.5f, 0.8f);
                     return ch.gameObject;
                 }
@@ -136,13 +133,17 @@ namespace EntreDosMons.Levels
         }
 
         // Objeto con el sprite en un hijo "Sprite" (así se puede mover el dibujo sin mover el objeto).
-        static T WithSprite<T>(string id, Sprite s, int order) where T : Component
+        // Si se pasa triggerSize, el collider (trigger) se pone ANTES del componente: los que llevan
+        // [RequireComponent(typeof(Collider2D))] (placa, cristal, cargador) no se pueden añadir sin él,
+        // porque Collider2D es abstracta y Unity no sabe cuál crear.
+        static T WithSprite<T>(string id, Sprite s, int order, Vector2? triggerSize = null, Vector2 triggerOffset = default) where T : Component
         {
             var go = Root(id, null);
             var child = new GameObject("Sprite").AddComponent<SpriteRenderer>();
             child.transform.SetParent(go.transform, false);
             child.sprite = s;
             child.sortingOrder = order;
+            if (triggerSize.HasValue) Trigger(go, triggerSize.Value, triggerOffset);
             return go.AddComponent<T>();
         }
 

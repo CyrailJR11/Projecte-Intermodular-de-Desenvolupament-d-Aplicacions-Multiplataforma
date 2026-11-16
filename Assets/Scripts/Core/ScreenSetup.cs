@@ -58,7 +58,6 @@ namespace EntreDosMons
             pp.gridSnapping = PixelPerfectCamera.GridSnapping.UpscaleRenderTexture;
             // Sin bandas negras: si la pantalla no es un múltiplo exacto, se estira lo justo para llenarla.
             pp.cropFrame = PixelPerfectCamera.CropFrame.StretchFill;
-            pp.filterMode = PixelPerfectCamera.PixelPerfectFilterMode.RetroAA;
         }
     }
 }
