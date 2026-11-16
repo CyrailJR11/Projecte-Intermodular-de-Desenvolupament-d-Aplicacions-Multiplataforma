@@ -15,6 +15,8 @@ namespace EntreDosMons
         public Vector2 max = new Vector2(70f, 10f);
 
         Vector3 velocity;
+        Vector3 smoothPosition;   // posición suave (sin redondear); la cámara se coloca redondeada a la rejilla de píxeles
+        bool started;
 
         void LateUpdate()
         {
@@ -25,7 +27,12 @@ namespace EntreDosMons
                 goal.x = Mathf.Clamp(goal.x, min.x, max.x);
                 goal.y = Mathf.Clamp(goal.y, min.y, max.y);
             }
-            transform.position = Vector3.SmoothDamp(transform.position, goal, ref velocity, smoothTime);
+            if (!started) { smoothPosition = transform.position; started = true; }
+            smoothPosition = Vector3.SmoothDamp(smoothPosition, goal, ref velocity, smoothTime);
+            // Redondeada a píxeles del juego (1/32 de casilla): el pixel art no "tiembla" al moverse la cámara.
+            float ppu = ScreenSetup.PixelsPerUnit;
+            transform.position = new Vector3(Mathf.Round(smoothPosition.x * ppu) / ppu,
+                                             Mathf.Round(smoothPosition.y * ppu) / ppu, smoothPosition.z);
         }
     }
 }

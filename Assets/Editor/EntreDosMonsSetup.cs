@@ -135,19 +135,10 @@ public static class EntreDosMonsSetup
         // Cámara pixel perfect (URP).
         Camera cam = Camera.main;
         if (cam == null) cam = new GameObject("Main Camera", typeof(Camera)) { tag = "MainCamera" }.GetComponent<Camera>();
-        cam.orthographic = true;
-        cam.orthographicSize = RefHeight / 2f / PPU;
-        cam.allowHDR = cam.allowMSAA = cam.allowDynamicResolution = false;
         cam.backgroundColor = new Color32(0x07, 0x18, 0x27, 0xFF);
         QualitySettings.antiAliasing = 0;
         QualitySettings.anisotropicFiltering = AnisotropicFiltering.Disable;
-        var pp = cam.GetComponent<PixelPerfectCamera>();
-        if (pp == null) pp = cam.gameObject.AddComponent<PixelPerfectCamera>();
-        pp.assetsPPU = PPU;
-        pp.refResolutionX = RefWidth;
-        pp.refResolutionY = RefHeight;
-        pp.gridSnapping = PixelPerfectCamera.GridSnapping.PixelSnapping;
-        pp.cropFrame = PixelPerfectCamera.CropFrame.Windowbox;
+        ScreenSetup.ConfigureCamera(cam);   // Pixel Perfect 640x360 ampliado sin bandas negras (x4 en 2560x1440)
         var follow = cam.GetComponent<CameraFollow2D>();
         if (follow == null) follow = cam.gameObject.AddComponent<CameraFollow2D>();
 
