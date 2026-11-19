@@ -1,8 +1,8 @@
 <div align="center">
 
-<img src="docs/img/title_screen.jpg" alt="Entre Dos Mons, pantalla de título" width="100%">
+<img src="docs/img/title_screen.jpg" alt="Entre Dos Mundos, pantalla de título" width="100%">
 
-# Entre Dos Mons
+# Entre Dos Mundos
 
 **Una aventura de puzles y plataformas 2D en pixel art donde dos personajes, dos mundos y una sola tecla lo cambian todo.**
 
@@ -185,7 +185,7 @@ Pixel art a 32 px por unidad, con cámara *Pixel Perfect* a 640×360. Dos juegos
 
 <div align="center">
 <img src="docs/img/escenas.png" alt="Escenas de ejemplo con los tiles" width="49%">
-<img src="docs/img/tiles.png" alt="Tileset de Entre Dos Mons" width="49%">
+<img src="docs/img/tiles.png" alt="Tileset de Entre Dos Mundos" width="49%">
 </div>
 
 ---
@@ -226,7 +226,7 @@ git clone https://github.com/CyrailJR11/Projecte-Intermodular-de-Desenvolupament
 
 1. En Unity Hub, pulsa **Add project from disk** y elige la carpeta clonada.
 2. Abre `Assets/Scenes/SampleScene.unity`.
-3. Usa el menú **Entre Dos Mons** de la barra superior:
+3. Usa el menú **Entre Dos Mundos** de la barra superior:
    - **1. Crear tiles y paletas**: crea un Tile por cada PNG y las paletas *Exterior* y *Coves*.
    - **2. Preparar escena de prueba**: Grid con 3 Tilemaps, cámara pixel perfect y el gestor de diálogos.
    - **3. Usar niveles por código**: monta el nivel a partir de `LevelLibrary`.
@@ -258,7 +258,7 @@ Assets/
 │   ├── Characters/   Nil (4 fotogramas) y Volt (6), 32×32
 │   ├── Palettes/     Exterior y Coves
 │   └── Tiles/        32 tiles 32×32 (ext_* y cova_*)
-├── Editor/           Menú "Entre Dos Mons" e importador de pixel art
+├── Editor/           Menú "Entre Dos Mundos" e importador de pixel art
 ├── Resources/
 │   ├── Dialogues/    dialogos_es.json (guion de Nil y Volt)
 │   └── Prefabs/      Nil, Volt, Caja, Valvula, Terminal, PlacaPresion… (los crea el menú 4)
@@ -291,7 +291,7 @@ Vistas previas de los niveles con su solución: [`Docs/niveles/`](Docs/niveles).
 
 <img src="docs/img/pc_pixel_studio.png" alt="PC Pixel Studio" width="120" align="right">
 
-Somos **Pablo Abad Ortega** y **Carlos Rodríguez**, un pequeño estudio indie de Girona. *Entre Dos Mons* es nuestro Projecte Intermodular del **CFGS de Desarrollo de Aplicaciones Multiplataforma (DAM)**, curso 2026-2027.
+Somos **Pablo Abad Ortega** y **Carlos Rodríguez**, un pequeño estudio indie de Girona. *Entre Dos Mundos* es nuestro Projecte Intermodular del **CFGS de Desarrollo de Aplicaciones Multiplataforma (DAM)**, curso 2026-2027.
 
 | | Rol |
 |---|---|
@@ -303,7 +303,7 @@ Somos **Pablo Abad Ortega** y **Carlos Rodríguez**, un pequeño estudio indie d
 
 <div align="center">
 <br>
-<img src="docs/img/poster.jpg" alt="Póster de Entre Dos Mons" width="320">
+<img src="docs/img/poster.jpg" alt="Póster de Entre Dos Mundos" width="320">
 <br><br>
 <sub>© 2026 PC Pixel Studio · Girona. Proyecto académico.</sub>
 </div>
